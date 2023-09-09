@@ -4,7 +4,7 @@
 {# harvester.html #}
 <h1>Status</h1>
 
-<div class="accordion">
+<div class="accordion" id="harvest-process-accordion">
     <div class="row p-2">
         <div class="col-1 fw-bold">Process ID</div>
         <div class="col-4 fw-bold">Created</div>
@@ -12,39 +12,44 @@
         <div class="col-2 fw-bold">Status</div>
     </div>
     {% for p in processes %}
-    <div class="accordion-item p-0 border-2" id="harvest-status">
-        <div class="row">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#harvest-process_{{ p.process_id }}">
-            <div class="col-1">{{ p.process_id }}</div>
-            <div class="col-4">{{ p.created }}</div>
-            <div class="col-4">{{ p.modified }}</div>
-            <div class="col-2">
-                {% if p.status.status_id == 1 %}
-                <span class="text-success">{{ p.status }}</span>
-                {% elif p.status.status_id == 2 %}
-                <span class="text-secondary">{{ p.status }}</span>
-                {% elif p.status.status_id == 3 %}
-                <span class="text-warning">{{ p.status }}</span>
-                {% elif p.status.status_id == 4 %}
-                <span class="text-danger">{{ p.status }}</span>
-                {% endif %}
-            </div>
-            </button>
-        </div>
-        <div id="harvest-process_{{ p.process_id }}" class="accordion-collapse collapse" data-bs-parent="#harvest-status">
-            <div class="accordion-body">
-                {% for e in entries %}
-                {% if e.process == p %}
-                    <div class="row p-1">
-                        <div class="col"><a href="https://admin.votesmart.org/loadCandidateSpeechDetail.do?candidateSpeechId={{ e.speech_id }}" target="_blank">{{ e.speech_id }}</a></div>
-                        <div class="col"><button class="btn btn-warning" style="color:white;">Resolve</button></div>
-                        <div class="col" style="align-items: end;"><button class="btn" style="background-color: #EE3E37; color: white;">Delete</button></div>
+    <div class="accordion-item p-0 border-2">
+        <div class="accordion-header" style="cursor: pointer;">
+            <div class="row">
+                <div class="accordion-button collapsed" data-bs-toggle="collapse"
+                    data-bs-target="#harvest-process_{{ p.process_id }}">
+                    <div class="col-1">{{ p.process_id }}</div>
+                    <div class="col-4">{{ p.created }}</div>
+                    <div class="col-4">{{ p.modified }}</div>
+                    <div class="col-2">
+                        {% if p.status.status_id == 1 %}
+                        <span class="text-success">{{ p.status }}</span>
+                        {% elif p.status.status_id == 2 %}
+                        <span class="text-secondary">{{ p.status }}</span>
+                        {% elif p.status.status_id == 3 %}
+                        <span class="text-warning">{{ p.status }}</span>
+                        {% elif p.status.status_id == 4 %}
+                        <span class="text-danger">{{ p.status }}</span>
+                        {% endif %}
                     </div>
-                {% endif %}
+                </div>
+            </div>
+        </div>
+        <div id="harvest-process_{{ p.process_id }}" class="accordion-collapse collapse"
+            data-bs-parent="#harvest-process-accordion">
+            <div class="accordion-body">
+                {% for e in p.harvestentryspeech_set.all %}
+                <div class="row p-1">
+                    <div class="col"><a
+                            href="https://admin.votesmart.org/loadCandidateSpeechDetail.do?candidateSpeechId={{ e.speech_id }}"
+                            target="_blank">{{ e.speech_id }}</a></div>
+                    <div class="col"><button class="btn btn-warning" style="color:white;">Resolve</button></div>
+                    <div class="col" style="align-items: end;"><button class="btn"
+                            style="background-color: #EE3E37; color: white;">Delete</button></div>
+                </div>
                 {% endfor %}
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
-{% endblock %}  
+{% endblock %}
