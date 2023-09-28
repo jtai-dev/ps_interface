@@ -21,9 +21,10 @@
 			color: #FFFFFF;
 			height: 100%;
 			width: 280px;
+			font-size: 18px;
 		}
 
-		.sidebar .nav-link:hover {
+		.sidebar .nav-link:hover{
 			color: #EE3E37;
 		}
 
@@ -43,7 +44,7 @@
 				<hr>
 				<ul class="nav flex-column">
 					<li class="nav-item">
-						<a href="{% url 'ps_harvester:harvester' %}" class="nav-link align-items-center"
+						<a href="{% url 'ps_harvester:harvester' %}" type="button" class="nav-link align-items-center"
 							data-bs-toggle="collapse" data-bs-target="#nav-sub-harvester">
 							<span>Harvester</span>
 						</a>

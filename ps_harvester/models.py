@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class HarvestStatus(models.Model):
     # Names:
     # 1) COMPLETE

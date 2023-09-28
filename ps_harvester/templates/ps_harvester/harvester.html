@@ -15,26 +15,26 @@
     <div class="accordion-item p-0 border-2">
         <div class="accordion-header" style="cursor: pointer;">
             <div class="row">
-                <div class="accordion-button collapsed" data-bs-toggle="collapse"
+                <button class="accordion-button collapsed" data-bs-toggle="collapse"
                     data-bs-target="#harvest-process_{{ p.process_id }}">
                     <div class="col-1">{{ p.process_id }}</div>
                     <div class="col-4">{{ p.created }}</div>
                     <div class="col-4">{{ p.modified }}</div>
                     <div class="col-2">
                         {% if p.status.status_id == 1 %}
-                        <span class="text-success">{{ p.status }}</span>
+                        <span class="text-success fw-bold">{{ p.status }}</span>
                         {% elif p.status.status_id == 2 %}
-                        <span class="text-secondary">{{ p.status }}</span>
+                        <span class="text-secondary fw-bold">{{ p.status }}</span>
                         {% elif p.status.status_id == 3 %}
-                        <span class="text-warning">{{ p.status }}</span>
+                        <span class="text-warning fw-bold">{{ p.status }}</span>
                         {% elif p.status.status_id == 4 %}
-                        <span class="text-danger">{{ p.status }}</span>
+                        <span class="text-danger fw-bold">{{ p.status }}</span>
                         {% endif %}
                     </div>
-                </div>
+                </button>
             </div>
         </div>
-        <div id="harvest-process_{{ p.process_id }}" class="accordion-collapse collapse"
+        <div class="accordion-collapse collapse" id="harvest-process_{{ p.process_id }}"
             data-bs-parent="#harvest-process-accordion">
             <div class="accordion-body">
                 {% for e in p.harvestentryspeech_set.all %}
