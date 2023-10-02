@@ -7,10 +7,17 @@
 <br>
 <br>
 <h5><strong>Select a file to upload:</strong></h5>
-<div class="input-group"> 
-    <input type="file" class="form-control" name="files">
+<form class="input-group" method="post" enctype="multipart/form-data"> 
+    {% csrf_token %}
+    <input type="file" class="form-control" name="harvestfiles" multiple>
     <button class="btn btn-outline-secondary" type="submit">Upload</button>
+</form>
+<br>
+<br>
+<div>
+    {% if number_of_entries %}
+        <h5>{{ number_of_entries }} entries created.</h5>
+    {% endif %}
 </div>
-
 
 {% endblock %}

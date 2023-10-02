@@ -6,7 +6,7 @@ class HarvestStatus(models.Model):
     # 1) COMPLETE
     # 2) INCOMPLETE
     # 3) PENDING REVIEW
-    # 3) ERROR
+    # 4) ERROR
     status_id = models.AutoField(primary_key=True)
     status_name = models.CharField(max_length=256)
 
@@ -16,7 +16,7 @@ class HarvestStatus(models.Model):
 
 class HarvestProcess(models.Model):
     process_id = models.BigAutoField(primary_key=True)
-    status = models.ForeignKey(HarvestStatus, on_delete=models.PROTECT)
+    status = models.ForeignKey(HarvestStatus, default=2, on_delete=models.PROTECT)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
@@ -41,5 +41,7 @@ class HarvestEntrySpeech(models.Model):
     # The identifier for each statements entry on admin
     speech_id = models.BigIntegerField(editable=False)
     process = models.ForeignKey(HarvestProcess, on_delete=models.CASCADE)
+    review = models.BooleanField(default=False)
+    review_message = models.TextField(null=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)

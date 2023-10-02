@@ -5,12 +5,17 @@
 <h1>Status</h1>
 
 <div class="accordion" id="harvest-process-accordion">
-    <div class="row p-2">
-        <div class="col-1 fw-bold">Process ID</div>
-        <div class="col-4 fw-bold">Created</div>
-        <div class="col-4 fw-bold">Modified</div>
-        <div class="col-2 fw-bold">Status</div>
-    </div>
+    {% if processes %}
+        <div class="row p-2">
+            <div class="col-1 fw-bold">Process ID</div>
+            <div class="col-4 fw-bold">Created</div>
+            <div class="col-4 fw-bold">Modified</div>
+            <div class="col-2 fw-bold">Status</div>
+        </div>
+    {% else %}
+    <h4>No current processes.</h4>
+    {% endif %}
+
     {% for p in processes %}
     <div class="accordion-item p-0 border-2">
         <div class="accordion-header" style="cursor: pointer;">
@@ -38,14 +43,17 @@
             data-bs-parent="#harvest-process-accordion">
             <div class="accordion-body">
                 {% for e in p.harvestentryspeech_set.all %}
+                {% if e.review %}
                 <div class="row p-1">
-                    <div class="col"><a
+                    <div class="col-1"><a
                             href="https://admin.votesmart.org/loadCandidateSpeechDetail.do?candidateSpeechId={{ e.speech_id }}"
                             target="_blank">{{ e.speech_id }}</a></div>
-                    <div class="col"><button class="btn btn-warning" style="color:white;">Resolve</button></div>
-                    <div class="col" style="align-items: end;"><button class="btn"
+                    <div class="col"><p class="fst-italic">{{ e.review_message }}</p></div>        
+                    <div class="col-1"><button class="btn btn-warning" style="color:white;">Resolve</button></div>
+                    <div class="col-1" style="align-items: end;"><button class="btn"
                             style="background-color: #EE3E37; color: white;">Delete</button></div>
                 </div>
+                {% endif %}
                 {% endfor %}
             </div>
         </div>
