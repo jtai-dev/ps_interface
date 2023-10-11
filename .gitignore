@@ -133,3 +133,5 @@ dmypy.json
 .SECRETKEY
 ps_automation
 .vscode/
+connection_info.json
+migrations/

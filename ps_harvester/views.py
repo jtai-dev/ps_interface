@@ -1,32 +1,110 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from ps_harvester.models import HarvestProcess
+from django.shortcuts import render, HttpResponseRedirect
+from django.urls import reverse
+from django.db.models import Prefetch
 
-import json
 
-def harvester(request):
-    processes = HarvestProcess.objects.order_by('-created')
-    processes_with_entries = processes.prefetch_related(
-        'harvestentryspeech_set')
-    return render(request, 'ps_harvester/harvester.html', context={'processes': processes_with_entries})
+from ps_harvester.file_harvest import (main as file_harvest,
+                                       HarvestError)
+
+from ps_harvester.forms import HarvestFilesForm
+from ps_harvester.models import (HarvestProcess,
+                                 HarvestEntrySpeech,
+                                 HarvestStatus)
+
+from django.views.generic import ListView
+
+
+class Harvester(ListView):
+
+    template_name = 'ps_harvester/harvester.html'
+    context_object_name = 'processes_with_entries'
+    model = HarvestProcess
+    paginate_by = 5
+
+    def get_queryset(self):
+        entries_for_review = HarvestEntrySpeech.objects.filter(review=True)
+        process_by_newest = HarvestProcess.objects.order_by('-created')
+
+        queryset = process_by_newest.prefetch_related(
+            Prefetch('harvestentryspeech_set', to_attr='all_entries'),
+            Prefetch('harvestentryspeech_set',
+                     queryset=entries_for_review, to_attr='entries_for_review'),
+        )
+
+        return queryset
+
+
+def resolve_entry(request, pk):
+    e = HarvestEntrySpeech.objects.get(entry_id=pk)
+    e.resolve()
+
+    if not HarvestEntrySpeech.objects.filter(review=True, process=e.process):
+        e.process.status = HarvestStatus.objects.get(status_name='COMPLETE')
+        e.process.save()
+
+    return HttpResponseRedirect(reverse('ps_harvester:harvester'))
+
+
+def delete_entry(request, pk):
+    e = HarvestEntrySpeech.objects.get(entry_id=pk)
+    e.remove()
+
+    if (not HarvestEntrySpeech.objects.filter(review=True, process=e.process)
+            and len(HarvestEntrySpeech.objects.filter(process=e.process)) > 0):
+        e.process.status = HarvestStatus.objects.get(status_name='COMPLETE')
+        e.process.save()
+    elif (len(HarvestEntrySpeech.objects.filter(process=e.process)) == 0):
+        e.process.status = HarvestStatus.objects.get(status_name='INVALID')
+
+    return HttpResponseRedirect(reverse('ps_harvester:harvester'))
 
 
 def file_harvester(request):
-    if request.method == 'POST' and request.FILES['harvestfiles']:
-        harvestfiles = request.FILES.getlist('harvestfiles')
-        for file in harvestfiles:
-            if file.multiple_chunks():
-                json_string = "".join([chunk.decode() for chunk in file.chunks()])
-            else:
-                json_string = file.read()
-        
-        file_content = json.loads(json_string)
-    
+
+    if request.method == 'POST':
+        files_form = HarvestFilesForm(request.POST, request.FILES)
+
+        if files_form.is_valid():
+            file_harvest_handler(files_form)
+            return HttpResponseRedirect(reverse('ps_harvester:harvester'))
+        else:
+            returned_context = {
+                'form_upload_error': files_form.errors['files']} if 'files' in files_form.errors else {}
+            files_form = HarvestFilesForm()
     else:
-        file_content = None
-       
-    number_of_entries = len(file_content) if file_content else None
-    return render(request, 'ps_harvester/file_harvester.html', context={'number_of_entries': number_of_entries})
+        files_form = HarvestFilesForm()
+        returned_context = {}
+
+    return render(request, 'ps_harvester/file_harvester.html',
+                  context={'files_form': files_form} | returned_context)
+
+
+def file_harvest_handler(form):
+
+    process = HarvestProcess.objects.create()
+
+    harvest_files = form.save(process=process)
+    file_contents = [hf.file_content for hf in harvest_files]
+
+    try:
+        speech_candidate_to_harvest = file_harvest(file_contents)
+
+        for speech_candidate_id, harvest in speech_candidate_to_harvest.items():
+            HarvestEntrySpeech.objects.create(process=process,
+                                              speech_candidate_id=speech_candidate_id,
+                                              review=harvest['review'],
+                                              review_message=harvest['review_message'])
+
+        if HarvestEntrySpeech.objects.filter(review=True, process=process):
+            process.status = HarvestStatus.objects.get(
+                status_name='PENDING REVIEW')
+        elif HarvestEntrySpeech.objects.filter(process=process):
+            process.status = HarvestStatus.objects.get(status_name='COMPLETE')
+
+    except HarvestError as e:
+        process.status = HarvestStatus.objects.get(status_name='ERROR')
+
+    process.save()
 
 
 def web_harvester(request):

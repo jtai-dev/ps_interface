@@ -3,21 +3,18 @@
 {% block body_block %}
 
 <h1>File Harvester</h1>
-<h4>Ideals are unattainable at times, in this case, you are just not able to schedule an automatic upload. 
+<h4>Ideals are unattainable at times, in this case, you are just not able to schedule an automatic upload.</h4>
 <br>
-<br>
-<h5><strong>Select a file to upload:</strong></h5>
+<h5><strong>Select a harvest templated JSON file to upload:</strong></h5>
 <form class="input-group" method="post" enctype="multipart/form-data"> 
     {% csrf_token %}
-    <input type="file" class="form-control" name="harvestfiles" multiple>
+    <input type="file" class="form-control" name="{{ files_form.files.name }}" multiple>
     <button class="btn btn-outline-secondary" type="submit">Upload</button>
 </form>
 <br>
 <br>
-<div>
-    {% if number_of_entries %}
-        <h5>{{ number_of_entries }} entries created.</h5>
-    {% endif %}
-</div>
+{% if form_upload_error %}
+    <h5 class="text-vs-red">{{form_upload_error}}</h5>
+{% endif %}
 
 {% endblock %}

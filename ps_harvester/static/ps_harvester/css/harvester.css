@@ -1,0 +1,41 @@
+.accordion-button:not(.collapsed),
+.accordion-button:hover {
+    background: linear-gradient(to right, #ADC7D4, #FFFFFF);
+    background-size: 500% 500%;
+    animation: subtle-gradient 1.5s infinite;
+}
+
+.underlined-btn:hover {
+    color: #EE3E37
+}
+
+.page-link {
+    color: #FFFFFF;
+    background-color: #333366;
+}
+
+
+.page-link:hover {
+    color: #FFFFFF;
+    background-color: #ADC7D4;
+}
+
+[id^="confirm-resolve"],
+[id^="cancel-resolve"] {
+    font-size: 2.0rem;
+    display: none;
+}
+
+[id^="confirm-resolve"] {
+    color: #333366;
+}
+
+[id^="cancel-resolve"] {
+    color: #EE3E37;
+}
+
+[id^="confirm-resolve"]:hover,
+[id^="cancel-resolve"]:hover {
+    color: #ADC7D4;
+    cursor: pointer;
+}

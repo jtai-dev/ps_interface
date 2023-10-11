@@ -1,0 +1,95 @@
+.text-vs-lblue {
+    color: #ADC7D4;
+}
+
+.text-vs-dblue {
+    color: #333366;
+}
+
+.text-vs-red {
+    color: #EE3E37;
+}
+
+.text-vs-white {
+    color: #FFFFFF;
+}
+
+.bg-vs-red {
+    background-color: #EE3E37;
+    color: #FFFFFF;
+}
+
+.bg-vs-lblue {
+    background-color: #ADC7D4;
+    color: #333366;
+}
+
+.bg-vs-dblue {
+    background-color: #333366;
+    color: #FFFFFF;
+}
+
+.bg-vs-white {
+    background-color: #FFFFFF;
+    color: #333366;
+}
+
+@keyframes subtle-gradient {
+    0% {
+        background-position: 0% 20%;
+    }
+
+    50% {
+        background-position: 20% 0%;
+    }
+
+    100% {
+        background-position: 0% 20%;
+    }
+}
+
+#main-container {
+    color: #333366;
+}
+
+#sidebar {
+    background: linear-gradient(-220deg, #333366, #EE3E37, #ADC7D4);
+    color: #FFFFFF;
+    background-size: 400% 400%;
+    animation: subtle-gradient 5s ease infinite;
+    height: 100%;
+    width: 280px;
+    font-size: 18px;
+}
+
+#sidebar .nav-link {
+    color: inherit;
+}
+
+#sidebar .nav-link:hover,
+#sidebar .nav-link:focus {
+    color: #ADC7D4;
+}
+
+.underlined-btn {
+    text-decoration: underline;
+    padding: 0%;
+    background: None;
+    border: None;
+}
+
+.clean-btn {
+    text-decoration: none;
+    padding: 0%;
+    background: none;
+    border: none;
+}
+
+.vs-link {
+    text-decoration: underline;
+    color: #333366;
+}
+
+.vs-link:hover {
+    color: #EE3E37;
+}
