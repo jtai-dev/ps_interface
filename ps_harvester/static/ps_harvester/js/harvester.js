@@ -22,13 +22,16 @@ $(document).ready(function () {
     $(".confirm-resolve").click(function (event) {
         event.preventDefault();
         var entryId = $(this).data("entry-id");
+        var processId = $(this).data("process-id");
         var url = $(this).data("url");
         $.ajax({
             url: url,
             type: "GET",
             success: function (data) {
                 $(`.harvest-entry[data-entry-id=${entryId}]`).remove()
+                console.log(data)
                 if (data.change_status) {
+                    
                     $(`.process-status[data-process-id=${processId}] span`).removeClass('review-status')
                     $(`.process-status[data-process-id=${processId}] span`).addClass(data.status_css_class)
                     $(`.process-status[data-process-id=${processId}] span`).text(data.status_name)

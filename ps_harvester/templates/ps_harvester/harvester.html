@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'ps_harvester/css/harvester.css' %}">
+<link rel="stylesheet" href="{% static 'ps_harvester/css/harvester.css' %}">    
 {% endblock %}
 
 {% block extra_script %}
@@ -163,8 +163,10 @@
                     
                     <div class="col-1 d-flex justify-content-md-evenly">
                         <button class="resolve-entry btn bg-vs-dblue" data-entry-id="{{ e.entry_id }}">Resolve</button>
-                        <button class="confirm-resolve clean-btn text-vs-dblue" 
-                                data-entry-id="{{e.entry_id}}" data-url="{% url 'ps_harvester:resolve_entry' pk=e.entry_id %}">
+                        <button class="confirm-resolve clean-btn text-vs-dblue"
+                                data-process-id="{{p.process_id}}"
+                                data-entry-id="{{e.entry_id}}" 
+                                data-url="{% url 'ps_harvester:resolve_entry' pk=e.entry_id %}">
                             <i class="bi bi-check-circle"></i>
                         </button>
                         <button class="cancel-resolve clean-btn text-vs-red" data-entry-id="{{e.entry_id}}" >
