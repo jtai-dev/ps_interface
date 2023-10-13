@@ -1,3 +1,5 @@
+
+/* VS custom assets */
 .text-vs-lblue {
     color: #ADC7D4;
 }
@@ -21,7 +23,7 @@
 
 .bg-vs-lblue {
     background-color: #ADC7D4;
-    color: #333366;
+    color: #FFFFFF;
 }
 
 .bg-vs-dblue {
@@ -34,6 +36,32 @@
     color: #333366;
 }
 
+.underlined-btn {
+    text-decoration: underline;
+    padding: 0%;
+    background: None;
+    border: None;
+}
+
+.clean-btn {
+    text-decoration: none;
+    padding: 0%;
+    background: none;
+    border: none;
+}
+
+.vs-link {
+    text-decoration: underline;
+    color: #333366;
+}
+
+.vs-link:hover {
+    color: #EE3E37;
+}
+/* ===================== */
+
+
+/* Base customization */
 @keyframes subtle-gradient {
     0% {
         background-position: 0% 20%;
@@ -61,6 +89,15 @@
     width: 280px;
     font-size: 18px;
 }
+/* ===================== */
+
+
+/* Bootstrap asset customization */
+.btn:hover {
+    background-color: #ADC7D4;
+    color:#FFFFFF
+}
+
 
 #sidebar .nav-link {
     color: inherit;
@@ -70,26 +107,4 @@
 #sidebar .nav-link:focus {
     color: #ADC7D4;
 }
-
-.underlined-btn {
-    text-decoration: underline;
-    padding: 0%;
-    background: None;
-    border: None;
-}
-
-.clean-btn {
-    text-decoration: none;
-    padding: 0%;
-    background: none;
-    border: none;
-}
-
-.vs-link {
-    text-decoration: underline;
-    color: #333366;
-}
-
-.vs-link:hover {
-    color: #EE3E37;
-}
+/* ===================== */

@@ -136,18 +136,23 @@ These commands initialize an empty database. The database stores information abo
 
 ### 2. Run
 ----------
-After making migrations, the web application is ready to run. However, this step is skipped when hosted and run on a server.
+After making migrations, the web application is ready to run. However, this step is skipped when hosting on a website.
 
+### <span style="color:red">IMPORTANT!:<span>
+### For deploying online, make sure to checkout this [documentation](https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/).
+<br>
+
+#### To run it locally:
 Within the source code directory, and on terminal (or any Unix shell):
 
 ```sh
 python3 manage.py runserver
 ```
 
-By default, the local hosting address would be https://127.0.0.1 with port number 8000.
+By default, the local hosting address would be http://127.0.0.1 with port number 8000.
 
 ```url
-https://127.0.0.1:8000
+http://127.0.0.1:8000
 ```
 
 <br>
@@ -161,4 +166,4 @@ Follow the steps in this section of the [page](https://docs.djangoproject.com/en
 
 
 #### Accessing the admin of the website
-While the application is running, you can type in the address: https://127.0.0.1:8000/admin, to administrate the tasks needed.
+While the application is running, you can type in the address followed by **'/admin'**, to administrate the tasks needed.

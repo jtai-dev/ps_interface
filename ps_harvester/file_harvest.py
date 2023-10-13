@@ -9,7 +9,7 @@ from datetime import datetime
 # External packages & libraries
 import pg8000
 from pg8000.exceptions import DatabaseError, InterfaceError
-from ps_automation.json_model import CondensedHarvests
+from ps_harvester.json_model import CondensedHarvests
 
 
 class HarvestError(Exception):

@@ -1,28 +1,16 @@
 {% extends "base.html" %}
 {% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'ps_harvester/css/harvester.css' %}">
+{% endblock %}
+
+{% block extra_script %}
+<script src="{% static 'ps_harvester/js/harvester.js' %}"></script>
+{% endblock %}
+
 {% block body_block %}
 
-<link rel="stylesheet" href="{% static 'ps_harvester/css/harvester.css' %}">
-
-<script>
-    function show_resolve_btns(eid){
-        var resolvebtn = document.getElementById(`resolve-entry_${eid}`)
-        var confirm = document.getElementById(`confirm-resolve_${eid}`)
-        var cancel = document.getElementById(`cancel-resolve_${eid}`)
-        confirm.style.display = "inline"
-        cancel.style.display = "inline"
-        resolvebtn.style.display = 'none'
-    }
-
-    function return_resolve_btn(eid){
-        var resolvebtn = document.getElementById(`resolve-entry_${eid}`)
-        var confirm = document.getElementById(`confirm-resolve_${eid}`)
-        var cancel = document.getElementById(`cancel-resolve_${eid}`)
-        confirm.style.display = "none"
-        cancel.style.display = "none"
-        resolvebtn.style.display = 'inline'
-    }
-</script>
 
 <h1>Status</h1>
 
@@ -45,14 +33,14 @@
         <div class="accordion-header" style="cursor: pointer;">
             <div class="row">
 
-                <div id="process-note_{{p.process_id}}" class="modal fade">
+                <div class="process-notes modal fade" data-process-id="{{p.process_id}}">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5">Harvest Process Notes</h1>
+                                <h1 class="modal-title fs-5 text-vs-dblue">Harvest Process Notes</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-                            <div id="process-note-text_{{p.process_id}}" class="modal-body">
+                            <div class="process-notes-text modal-body" data-process-id="{{p.process_id}}">
                                 {{p.note}}
                             </div>
                             <div class="modal-footer">
@@ -63,15 +51,15 @@
                     </div>
                 </div>
 
-                <div id="process-error-msg_{{p.process_id}}" class="modal fade">
+                <div class="process-error modal fade" data-process-id="{{p.process_id}}">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5">Process Error</h1>
+                                <h1 class="modal-title fs-5 text-vs-dblue">Error Processing</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-                            <div id="error-note-text_{{p.process_id}}" class="modal-body">
-                                {{p.note}}
+                            <div class="process-error-text modal-body text-vs-dblue" data-process-id="{{p.process_id}}">
+                                <p>{{p.error_msg}}</p>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn bg-vs-red" data-bs-dismiss="modal">Close</button>
@@ -80,44 +68,50 @@
                     </div>
                 </div>
 
-                <div class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#harvest-entries_{{ p.process_id }}">
+                <div class="process accordion-button collapsed" data-process-id="{{p.process_id}}"  
+                    data-bs-toggle="collapse" 
+                    data-bs-target=".harvest-entries[data-process-id='{{p.process_id}}']">
                     <div class="col-2">
-                        <button class="underlined-btn text-vs-dblue" data-bs-toggle="modal" data-bs-target="#process-note_{{p.process_id}}">{{p.process_id }}</button>
+                        <button class="process-id underlined-btn text-vs-dblue" data-process-id="{{p.process_id}}" 
+                        data-bs-toggle="modal" 
+                        data-bs-target=".process-notes[data-process-id='{{p.process_id}}']">{{p.process_id }}</button>
                     </div>
                     <div class="col-2"><span>{{ p.harvestentryspeech_set.all | length }}</span></div>
                     <div class="col-3"><span>{{ p.created }}</span></div>
                     <div class="col-3"><span>{{ p.modified }}</span></div>
-                    <div class="col-2">
+                    <div class="process-status col-2" data-process-id="{{p.process_id}}" >
                         {% if p.status.status_id == 1 %}
-                        <span class="text-success fw-bold">{{ p.status }}</span>
+                        <span class="complete-status">{{ p.status }}</span>
                         {% elif p.status.status_id == 2 %}
-                        <span class="text-secondary fw-bold">{{ p.status }}</span>
+                        <span class="invalid-status">{{ p.status }}</span>
                         {% elif p.status.status_id == 3 %}
-                        <span class="text-vs-dblue fst-italic fw-bold ">{{ p.status }}</span>
+                        <span class="review-status">{{ p.status }}</span>
                         {% elif p.status.status_id == 4 %}
-                        <a class="underlined-btn text-vs-red fw-bold" data-bs-toggle="modal" data-bs-target="#process-error-msg_{{p.process_id}}">{{ p.status }}</a>
+                        <a class="error-status" data-bs-toggle="modal" data-bs-target=".process-error[data-process-id='{{p.process_id}}']">{{ p.status }}</a>
                         {% endif %}
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="harvest-entries_{{ p.process_id }}" class="accordion-collapse collapse"  data-bs-parent="#harvest-process-accordion">
+        <div class="harvest-entries accordion-collapse collapse" data-process-id="{{p.process_id}}" data-bs-parent="#harvest-process-accordion">
             <div class="accordion-body">
                 {% if not p.entries_for_review %}
                     <span class="text-vs-dblue">No entries for review.</span>
                 {% endif %}
-                {% for e in p.entries_for_review %}
-                <div class="row p-1">
 
-                    <div id="entry-note_{{e.entry_id}}" class="modal fade" >
+                {% for e in p.entries_for_review %}
+
+                <div class="harvest-entry row p-1" data-entry-id="{{e.entry_id}}">
+
+                    <div class="entry-notes modal fade" data-entry-id="{{e.entry_id}}" >
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5" >Harvest Entry Notes</h1>
+                                    <h1 class="modal-title fs-5 text-vs-dblue">Harvest Entry Notes</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                <div id="entry-note-text_{{e.entry_id}}" class="modal-body">
+                                <div class="entry-notes-text modal-body text-vs-dblue">
                                     {{e.note}}
                                 </div>
                                 <div class="modal-footer">
@@ -128,26 +122,58 @@
                         </div>
                     </div>
 
+                    <div class="delete-entry-confirmation modal fade" data-entry-id="{{e.entry_id}}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5 text-vs-dblue">Confirm Delete</h1>
+                                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="delete-entry-confirmation-text modal-body">
+                                    <div class="form-check form-switch text-vs-dblue">
+                                        <p>Deleting this entry will remove any association with the entry made to VoteSmart's database.</p>
+                                        <p>In other words, the harvester will no longer retain any control over what has been imported to VoteSmart's database.</p>
+                                        <p>If you wish to also delete the entry made to VoteSmart's database, and to avoid the above, 
+                                            please toggle the button below.</p>
+                                        <label class="form-check-label" for="pvsdb-delete">Delete entry from VoteSmart's database</label>
+                                        <input class="form-check-input pvsdb-delete" type="checkbox" role="switch">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" 
+                                            class="confirm-delete btn bg-vs-red" 
+                                            data-bs-dismiss="modal" 
+                                            data-entry-id="{{e.entry_id}}"
+                                            data-process-id="{{p.process_id}}"
+                                            data-url="{% url 'ps_harvester:delete_entry' pk=e.entry_id %}">Yes</button>
+                                    <button type="button" class="btn bg-vs-dblue" data-bs-dismiss="modal">No</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="col-2">
-                        <button class="underlined-btn" data-bs-toggle="modal" data-bs-target="#entry-note_{{e.entry_id}}">{{ e.speech_candidate_id }}</button>
+                        <button class="underlined-btn text-vs-dblue" 
+                                data-bs-toggle="modal" 
+                                data-bs-target=".entry-notes[data-entry-id='{{e.entry_id}}']">{{ e.speech_candidate_id }}</button>
                     </div>
                     <div class="col-xl-8 col-lg-7 col-md-5 col-sm-4 col-xs-2">
-                        <a class="vs-link" href="https://admin.votesmart.org/loadCandidateSpeechDetail.do?candidateSpeechId={{ e.speech_candidate_id }}"
-                            target="_blank">{{ e.review_message }}</a>
+                        <a class="vs-link" href="{{ e.admin_url }}" target="_blank">{{ e.review_message }}</a>
                     </div>
                     
                     <div class="col-1 d-flex justify-content-md-evenly">
-                        <button id="resolve-entry_{{e.entry_id}}" onclick="show_resolve_btns('{{e.entry_id}}')" class="btn bg-vs-dblue text-vs-white">Resolve</button>
-                        <a id="confirm-resolve_{{e.entry_id}}" type="button" href="{% url 'ps_harvester:resolve_entry' pk=e.entry_id %}">
+                        <button class="resolve-entry btn bg-vs-dblue" data-entry-id="{{ e.entry_id }}">Resolve</button>
+                        <button class="confirm-resolve clean-btn text-vs-dblue" 
+                                data-entry-id="{{e.entry_id}}" data-url="{% url 'ps_harvester:resolve_entry' pk=e.entry_id %}">
                             <i class="bi bi-check-circle"></i>
-                        </a>
-                        <button id="cancel-resolve_{{e.entry_id}}" class="clean-btn" onclick="return_resolve_btn('{{e.entry_id}}')">
+                        </button>
+                        <button class="cancel-resolve clean-btn text-vs-red" data-entry-id="{{e.entry_id}}" >
                             <i class="bi bi-x-circle"></i>
                         </button>
                     </div>
 
                     <div class="col-1" style="align-items: end;">
-                        <a id="delete-entry" type="button" href="{% url 'ps_harvester:delete_entry' pk=e.entry_id %}" class="btn bg-vs-red text-vs-white">Delete</a>
+                        <button class="delete-entry btn bg-vs-red" data-bs-toggle="modal" data-bs-target=".delete-entry-confirmation[data-entry-id='{{e.entry_id}}']">Delete</button>
                     </div>
                 </div>
                 {% endfor %}
@@ -167,7 +193,19 @@
         {% else %}
             <li class="page-item disabled"><a class="page-link">Previous</a></li>
         {% endif %}
-        
+
+        {% for i in custom_elided_page_range %}
+            {% if page_obj.number == i %}
+                <li class="page-item"><span class="page-link">{{ i }}</span></li>
+
+            {% else %}
+                {% if i == page_obj.paginator.ELLIPSIS %}
+                    <li class="page-item"><span class="page-link page-link-num">{{ i }}</span></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link page-link-num" href="?page={{ i }}">{{ i }}</a></li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
 
         {% if page_obj.has_next %}
         <li class="page-item">
@@ -180,5 +218,5 @@
     
     </ul>
 </div>
-
 {% endblock %}
+
