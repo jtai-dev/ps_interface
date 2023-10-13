@@ -11,7 +11,7 @@ class HarvestStatus(models.Model):
     status_name = models.CharField(max_length=256)
 
     def __str__(self) -> str:
-        return self.status_name
+        return f"{self.status_id}-{self.status_name}"
 
 
 class HarvestProcess(models.Model):
@@ -33,9 +33,10 @@ class HarvestFile(models.Model):
     @property
     def file_content(self) -> str:
         if self.filepath.multiple_chunks():
+            file_bytes_decoded = "".join([chunk.decode()
+                                for chunk in self.filepath.chunks()])
             self.filepath.delete()
-            return "".join([chunk.decode()
-                            for chunk in self.filepath.chunks()])
+            return file_bytes_decoded
 
         else:
             file_bytes = self.filepath.read()

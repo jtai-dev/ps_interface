@@ -15,12 +15,13 @@ from ps_harvester.models import (HarvestProcess,
 
 from django.views.generic import ListView
 
+
 class Harvester(ListView):
 
     template_name = 'ps_harvester/harvester.html'
     context_object_name = 'processes_with_entries'
     model = HarvestProcess
-    paginate_by = 15
+    paginate_by = 15    
 
     def get_queryset(self):
         entries_for_review = HarvestEntrySpeech.objects.filter(review=True)
@@ -33,16 +34,17 @@ class Harvester(ListView):
         )
 
         return queryset
-    
+
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        
+
         context = super().get_context_data(**kwargs)
         page_obj = context['page_obj']
         paginator = page_obj.paginator
-        context['custom_elided_page_range'] = paginator.get_elided_page_range(page_obj.number, on_each_side=2)
+        context['custom_elided_page_range'] = paginator.get_elided_page_range(
+            page_obj.number, on_each_side=2)
 
         return context
-        
+
 
 def resolve_entry(request, pk):
     e = HarvestEntrySpeech.objects.get(entry_id=pk)
