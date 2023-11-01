@@ -76,7 +76,7 @@
     }
 }
 
-#main-container {
+#content-container {
     color: #333366;
 }
 
@@ -92,12 +92,11 @@
 /* ===================== */
 
 
-/* Bootstrap asset customization */
+/* Bootstrap customization */
 .btn:hover {
     background-color: #ADC7D4;
     color:#FFFFFF
 }
-
 
 #sidebar .nav-link {
     color: inherit;
@@ -108,3 +107,7 @@
     color: #ADC7D4;
 }
 /* ===================== */
+
+body {
+    overflow-x: hidden !important;
+}

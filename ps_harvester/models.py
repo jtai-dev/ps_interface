@@ -1,10 +1,11 @@
+
 from django.db import models
 
 
 class HarvestStatus(models.Model):
     # Names:
     # 1) COMPLETE
-    # 2) INCOMPLETE (Change to INVALID)
+    # 2) INVALID
     # 3) PENDING REVIEW
     # 4) ERROR
     status_id = models.AutoField(primary_key=True)
@@ -14,14 +15,36 @@ class HarvestStatus(models.Model):
         return f"{self.status_id}-{self.status_name}"
 
 
+class HarvestProcessManager(models.Manager):
+    pass
+
+
 class HarvestProcess(models.Model):
+
     process_id = models.BigAutoField(primary_key=True)
     status = models.ForeignKey(
         HarvestStatus, default=2, on_delete=models.PROTECT)
-    note = models.TextField(null=True)
+    notes = models.TextField(null=True, default="")
     error_msg = models.TextField(null=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+
+    def refresh_status(self):
+
+        if self.status.status_name != 'ERROR':
+            if self.harvestentryspeech_set:
+                if not self.harvestentryspeech_set.filter(review=True):
+                    self.status = HarvestStatus.objects.get(
+                        status_name='COMPLETE')
+                else:
+                    self.status = HarvestStatus.objects.get(
+                        status_name='PENDING REVIEW')
+            else:
+                self.status = HarvestStatus.objects.get(status_name='INCOMPLETE')
+
+        self.save()
+
+        return self.status.status_name
 
 
 class HarvestFile(models.Model):
@@ -34,7 +57,7 @@ class HarvestFile(models.Model):
     def file_content(self) -> str:
         if self.filepath.multiple_chunks():
             file_bytes_decoded = "".join([chunk.decode()
-                                for chunk in self.filepath.chunks()])
+                                          for chunk in self.filepath.chunks()])
             self.filepath.delete()
             return file_bytes_decoded
 
@@ -53,17 +76,19 @@ class HarvestWebDirect(models.Model):
 
 class HarvestEntrySpeech(models.Model):
     entry_id = models.BigAutoField(primary_key=True)
-    # The identifier for each statements entry on admin
+
+    # Identifier for each statements entry on VoteSmart's Admin
     speech_candidate_id = models.BigIntegerField(editable=False)
-    process = models.ForeignKey(HarvestProcess, on_delete=models.CASCADE, editable=False)
+    process = models.ForeignKey(
+        HarvestProcess, on_delete=models.CASCADE, editable=False)
     review = models.BooleanField(default=False)
     review_message = models.TextField(null=True)
-    note = models.TextField(null=True)
+    notes = models.TextField(null=True, default="")
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
-    def remove(self, admin=False):
-        super().delete()
+    def delete(self, admin=False, *args, **kwargs):
+        return super().delete(*args, **kwargs)
 
     def resolve(self):
         self.review = False

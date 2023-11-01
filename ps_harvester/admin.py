@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import (HarvestStatus, 
-                     HarvestProcess, 
-                     HarvestFile, 
-                     HarvestWebDirect, 
-                     HarvestEntrySpeech,
-                    )
+from ps_harvester.models import (HarvestStatus,
+                                 HarvestProcess,
+                                 HarvestFile,
+                                 HarvestWebDirect,
+                                 HarvestEntrySpeech,
+                                 )
 
 # Register your models here.
 admin.site.register(HarvestStatus)

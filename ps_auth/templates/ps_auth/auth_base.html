@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'ps_auth/css/ps_auth.css' %}">
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
+
+{% block main_container %}
+{% endblock %}
+
+{% block body_block %}
+    <div id="auth-container" class="container py-5 ">
+        <div class="row d-flex py-5 justify-content-center h-100">
+            <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                <div class="card shadow bg-light" style="border-radius: 1rem;">
+                    <div class="card-body">
+                        {% block auth_card_content %}
+                        {% endblock %}
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block body_block %}
+{% block content_container %}
 
 <h1>File Harvester</h1>
 <h4>Ideals are unattainable at times, in this case, you are just not able to schedule an automatic upload.</h4>
@@ -8,7 +8,7 @@
 <h5><strong>Select a harvest templated JSON file to upload:</strong></h5>
 <form class="input-group" method="post" enctype="multipart/form-data"> 
     {% csrf_token %}
-    <input type="file" class="form-control" name="{{ files_form.files.name }}" multiple>
+    <input type="file" class="form-control" name="{{ form.files.name }}" multiple>
     <button class="btn btn-outline-secondary" type="submit">Upload</button>
 </form>
 <br>

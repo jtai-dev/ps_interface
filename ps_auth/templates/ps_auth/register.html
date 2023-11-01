@@ -1,0 +1,119 @@
+{% extends "ps_auth/auth_base.html" %}
+{% load static %}
+
+
+{% block auth_card_content %}
+<div class="d-flex container align-items-center ms-4">
+    <object data="{% static 'img/votesmart-logo-colored.svg' %}" type="image/svg+xml" width="100px" height="100px"></object>
+    <h1>Register</h1>
+</div>
+
+{% if form.non_field_errors %}
+{% for error in form.non_field_errors %}
+    <p class="text-start text-vs-red mx-5">
+        {{ error }}
+    </p>
+{% endfor %}
+{% endif %}
+
+{% if request.method == "POST" %}
+    {% if not form.errors and not form.non_field_errors %}
+        <div class="container mt-2">
+            <div class="mx-4 mb-4 text-start">
+                <h3>Registration Successful</h3>
+                <h5>Thank you for joining the cause, {{your_name}}! We have been expecting you.</h5>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
+
+{% if form %}
+<form method="post" class="container mt-5 text-center">
+    {% csrf_token %}
+    <div class="mb-4 mx-5 text-start">
+
+        <label for="username-register" class="form-label text-start">
+            <span class="fw-bold">{{ form.username.label }}:</span>
+        </label>
+
+        <input  id="username-register"
+                type="text" 
+                name="{{ form.username.name }}" 
+                class="form-control form-control-lg">
+
+        {% if form.username.errors %}
+        {% for error in form.username.errors %}
+            <p class="text-start text-vs-red">{{error}}</p>
+        {% endfor %}
+        {% endif %}
+
+    </div>
+
+    <div class="mb-4 mx-5 text-start">
+
+        <label for="email-register" class="form-label text-start">
+            <span class="fw-bold">{{ form.email.label }}:</span>
+        </label>
+
+        <input  id="email-register"
+                type="text" 
+                name="{{ form.email.name }}" 
+                class="form-control form-control-lg">
+        {% if form.email.errors %}
+        {% for error in form.email.errors %}
+            <p class="text-start text-vs-red">{{error}}</p>
+        {% endfor %}
+        {% endif %}
+
+    </div>
+
+    <div class="mb-4 mx-5 text-start">
+        <label for="password-register" class="form-label text-start">
+            <span class="fw-bold">{{ form.password1.label }}:</span>
+        </label>
+        <input  id="password-register"
+                type="password" 
+                name="{{ form.password1.name }}" 
+                class="form-control form-control-lg">
+
+        {% if form.password1.errors %}
+        {% for error in form.password1.errors %}
+            <p class="text-start text-vs-red">{{error}}</p>
+        {% endfor %}
+        {% endif %}
+
+    </div>
+
+    <div class="mb-4 mx-5 text-start">
+        <label for="confirm-password-register" class="form-label text-start">
+            <span class="fw-bold">{{ form.password2.label }}:</span>
+        </label>
+        <input  id="confirm-password-register"
+                type="password" 
+                name="{{ form.password2.name }}" 
+                class="form-control form-control-lg">
+
+        {% if form.password2.errors %}
+        {% for error in form.password2.errors %}
+            <p class="text-start text-vs-red">{{error}}</p>
+        {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="mt-5 mb-4 mx-5">
+        <input id="register-btn" type="submit" class="btn auth-btn px-5 py-3" value="JOIN">
+    </div>
+</form>
+{% endif %}
+
+<div class="card-footer">
+    <div id="registration" class="text-start">
+        
+        <a href="{% url 'ps_auth:login' %}" class="vs-link me-2 fst-italic">
+            <i class="me-2 bi bi-arrow-left-square-fill" style="font-size:1.2rem"></i>
+            Return to login
+        </a>
+    </div>
+</div>
+
+{% endblock %}

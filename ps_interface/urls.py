@@ -22,5 +22,7 @@ from ps_interface import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', view=views.index, name='index'),
-    path('harvester/', include('ps_harvester.urls'), name='ps_harvester')
+    path('harvester/', include('ps_harvester.urls'), name='ps_harvester'),
+    path('auth/', include('ps_auth.urls'), name='auth'),
+    path('users/', include('ps_users.urls'), name='users')
 ]

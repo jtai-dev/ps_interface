@@ -1,0 +1,73 @@
+{% extends "ps_auth/auth_base.html" %}
+{% load static %}
+
+
+{% block auth_card_content %}
+<div class="d-flex container align-items-center">
+    <object data="{% static 'img/votesmart-logo-colored.svg' %}" type="image/svg+xml" width="100px" height="100px"></object>
+    <h1>Forgot Password?</h1>
+</div>
+
+{% if request.method == "POST" %}
+    {% if not form.errors and not form.non_field_errors %}
+        <div class="container mt-2">
+            <div class="mx-4 mb-4 text-start">
+                <h3>Email Sent</h3>
+                <h5>If the email is in our system and it is your email, you should receive it in your inbox. Be sure to also 
+                    check your spam or junk folders.
+                </h5>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
+
+
+{% if form %}
+<div class="mx-4 mt-2">
+    <h5>Enter your email below and we'll email instructions for setting a new one.</h5>
+</div>
+
+{% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+        <p class="text-start text-vs-red mx-5">
+            {{ error }}
+        </p>
+    {% endfor %}
+{% endif %}
+
+<form method="post" class="container mt-5 text-center">
+    {% csrf_token %}
+    <div class="mb-4 mx-3 text-start">
+
+        <label for="email-reset" class="form-label text-start">
+            <span class="fw-bold">Enter your email:</span>
+        </label>
+
+        <input  id="email-reset"
+                type="text" 
+                name="{{ form.email.name }}" 
+                class="form-control form-control-lg">
+        {% if form.email.errors %}
+            {% for error in form.email.errors %}
+                <p class="text-start text-vs-red">{{error}}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div class="mt-4 mb-5 mx-5">
+        <input id="reset-pass-btn" type="submit" class="btn auth-btn px-5 py-3" value="RESET MY PASSWORD">
+    </div>
+</form>
+{% endif %}
+
+<div class="card-footer">
+    <div id="registration" class="text-end">
+        
+        <a href="{% url 'ps_auth:login' %}" class="vs-link me-2 fst-italic">
+            Return to login
+            <i class="ms-2 bi bi-arrow-right-square-fill" style="font-size:1.2rem"></i>
+        </a>
+    </div>
+</div>
+
+{% endblock %}

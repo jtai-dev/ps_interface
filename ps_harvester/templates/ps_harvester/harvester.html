@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
+
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'ps_harvester/css/harvester.css' %}">    
 {% endblock %}
@@ -9,12 +10,10 @@
 <script src="{% static 'ps_harvester/js/harvester.js' %}"></script>
 {% endblock %}
 
-{% block body_block %}
+{% block content_container %}
+<h1>Harvest Status</h1>
 
-
-<h1>Status</h1>
-
-<div class="accordion accordion-flush" id="harvest-process-accordion">
+<div class="accordion accordion-flush mt-4" id="harvest-process-accordion">
 
     {% if processes_with_entries %}
     <div class="row p-2">
@@ -33,32 +32,34 @@
         <div class="accordion-header" style="cursor: pointer;">
             <div class="row">
 
-                <div class="process-notes modal fade" data-process-id="{{p.process_id}}">
+                <div class="process-notes modal fade" data-process-id="{{ p.process_id }}">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5 text-vs-dblue">Harvest Process Notes</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-                            <div class="process-notes-text modal-body" data-process-id="{{p.process_id}}">
-                                {{p.note}}
+                            <div class="modal-body">
+                                <textarea disabled 
+                                          class="form-control" 
+                                          data-url="{% url 'ps_harvester:harvest_process_note' pk=p.process_id %}"></textarea>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn bg-vs-dblue">Edit</button>
+                                <button type="button" class="btn bg-vs-dblue edit-btn">Edit</button>
                                 <button type="button" class="btn bg-vs-red" data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="process-error modal fade" data-process-id="{{p.process_id}}">
+                <div class="process-error modal fade" data-process-id="{{ p.process_id }}">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5 text-vs-dblue">Error Processing</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-                            <div class="process-error-text modal-body text-vs-dblue" data-process-id="{{p.process_id}}">
+                            <div class="modal-body text-vs-dblue">
                                 <p>{{p.error_msg}}</p>
                             </div>
                             <div class="modal-footer">
@@ -68,33 +69,53 @@
                     </div>
                 </div>
 
-                <div class="process accordion-button collapsed" data-process-id="{{p.process_id}}"  
-                    data-bs-toggle="collapse" 
-                    data-bs-target=".harvest-entries[data-process-id='{{p.process_id}}']">
+                <div class="process accordion-button collapsed text-vs-dblue" 
+                     data-process-id="{{ p.process_id }}"  
+                     data-bs-toggle="collapse" 
+                     data-bs-target=".harvest-entries[data-process-id='{{ p.process_id }}']">
+
+                    <!-- Process IDs -->
                     <div class="col-2">
-                        <button class="process-id underlined-btn text-vs-dblue" data-process-id="{{p.process_id}}" 
-                        data-bs-toggle="modal" 
-                        data-bs-target=".process-notes[data-process-id='{{p.process_id}}']">{{p.process_id }}</button>
+                        <button class="process-id underlined-btn text-vs-dblue" 
+                                data-process-id="{{ p.process_id }}"
+                                data-url="{% url 'ps_harvester:harvest_process_note' pk=p.process_id %}" 
+                                data-bs-toggle="modal" 
+                                data-bs-target=".process-notes[data-process-id='{{ p.process_id }}']"
+                                >{{p.process_id }}
+                        </button>
                     </div>
+
+                    <!-- Total Entries -->
                     <div class="col-2"><span>{{ p.harvestentryspeech_set.all | length }}</span></div>
+
+                    <!-- Created & Modified dates -->
                     <div class="col-3"><span>{{ p.created }}</span></div>
                     <div class="col-3"><span>{{ p.modified }}</span></div>
-                    <div class="process-status col-2" data-process-id="{{p.process_id}}" >
+
+                    <!-- Statuses -->
+                    <div class="process-status col-2 " data-process-id="{{ p.process_id }}" >
                         {% if p.status.status_id == 1 %}
-                        <span class="complete-status">{{ p.status }}</span>
+                        <span class="complete-status">{{ p.status.status_name }}</span>
                         {% elif p.status.status_id == 2 %}
-                        <span class="invalid-status">{{ p.status }}</span>
+                        <span class="invalid-status">{{ p.status.status_name }}</span>
                         {% elif p.status.status_id == 3 %}
-                        <span class="review-status">{{ p.status }}</span>
+                        <span class="review-status">{{ p.status.status_name }}</span>
                         {% elif p.status.status_id == 4 %}
-                        <a class="error-status" data-bs-toggle="modal" data-bs-target=".process-error[data-process-id='{{p.process_id}}']">{{ p.status }}</a>
+                        <a class="error-status" 
+                           data-bs-toggle="modal" 
+                           data-bs-target=".process-error[data-process-id='{{p.process_id}}']"
+                           >{{ p.status.status_name }}</a>
+
                         {% endif %}
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="harvest-entries accordion-collapse collapse" data-process-id="{{p.process_id}}" data-bs-parent="#harvest-process-accordion">
+        <div class="harvest-entries accordion-collapse collapse" 
+             data-process-id="{{ p.process_id }}" 
+             data-bs-parent="#harvest-process-accordion">
+
             <div class="accordion-body">
                 {% if not p.entries_for_review %}
                     <span class="text-vs-dblue">No entries for review.</span>
@@ -102,20 +123,51 @@
 
                 {% for e in p.entries_for_review %}
 
-                <div class="harvest-entry row p-1" data-entry-id="{{e.entry_id}}">
+                <div class="harvest-entry row p-1" data-entry-id="{{ e.entry_id }}">
 
-                    <div class="entry-notes modal fade" data-entry-id="{{e.entry_id}}" >
+                    <div class="col-2">
+                        <button class="speech-id underlined-btn text-vs-dblue"
+                                data-entry-id="{{ e.entry_id }}"
+                                data-bs-toggle="modal" 
+                                data-bs-target=".entry-notes[data-entry-id='{{ e.entry_id }}']">{{ e.speech_candidate_id }}</button>
+                    </div>
+                    <div class="col-xl-8 col-lg-7 col-md-5 col-sm-4 col-xs-2">
+                        <a class="vs-link" href="{{ e.admin_url }}" target="_blank">{{ e.review_message }}</a>
+                    </div>
+                    
+                    <div class="col-1 d-flex justify-content-md-evenly">
+                        <button class="resolve-entry btn bg-vs-dblue" data-entry-id="{{ e.entry_id }}">Resolve</button>
+                        <button class="confirm-resolve clean-btn text-vs-dblue"
+                                data-entry-id="{{ e.entry_id }}" 
+                                data-process-id="{{ p.process_id }}"
+                                data-url="{% url 'ps_harvester:resolve_entry' pk=e.entry_id %}">
+                            <i class="bi bi-check-circle"></i>
+                        </button>
+                        <button class="cancel-resolve clean-btn text-vs-red" data-entry-id="{{ e.entry_id }}" >
+                            <i class="bi bi-x-circle"></i>
+                        </button>
+                    </div>
+
+                    <div class="col-1" style="align-items: end;">
+                        <button class="delete-entry btn bg-vs-red" 
+                                data-bs-toggle="modal" 
+                                data-bs-target=".delete-entry-confirmation[data-entry-id='{{ e.entry_id }}']">Delete</button>
+                    </div>
+
+                    <div class="entry-notes modal fade" data-entry-id="{{ e.entry_id }}" >
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h1 class="modal-title fs-5 text-vs-dblue">Harvest Entry Notes</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
-                                <div class="entry-notes-text modal-body text-vs-dblue">
-                                    {{e.note}}
+                                <div class="modal-body text-vs-dblue">
+                                    <textarea disabled 
+                                              class="form-control"
+                                              data-url="{% url 'ps_harvester:harvest_entry_note' pk=e.entry_id %}"></textarea>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn bg-vs-dblue">Edit</button>
+                                    <button type="button" class="btn edit-btn bg-vs-dblue">Edit</button>
                                     <button type="button" class="btn bg-vs-red" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>
@@ -129,7 +181,7 @@
                                     <h1 class="modal-title fs-5 text-vs-dblue">Confirm Delete</h1>
                                     <button class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
-                                <div class="delete-entry-confirmation-text modal-body">
+                                <div class="modal-body">
                                     <div class="form-check form-switch text-vs-dblue">
                                         <p>Deleting this entry will remove any association with the entry made to VoteSmart's database.</p>
                                         <p>In other words, the harvester will no longer retain any control over what has been imported to VoteSmart's database.</p>
@@ -140,42 +192,17 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" 
-                                            class="confirm-delete btn bg-vs-red" 
-                                            data-bs-dismiss="modal" 
+                                    <button type="button" class="confirm-delete btn bg-vs-red" 
                                             data-entry-id="{{e.entry_id}}"
                                             data-process-id="{{p.process_id}}"
-                                            data-url="{% url 'ps_harvester:delete_entry' pk=e.entry_id %}">Yes</button>
+                                            data-url="{% url 'ps_harvester:delete_entry' pk=e.entry_id %}"
+                                            data-bs-dismiss="modal">Yes
+                                    </button>
+
                                     <button type="button" class="btn bg-vs-dblue" data-bs-dismiss="modal">No</button>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="col-2">
-                        <button class="underlined-btn text-vs-dblue" 
-                                data-bs-toggle="modal" 
-                                data-bs-target=".entry-notes[data-entry-id='{{e.entry_id}}']">{{ e.speech_candidate_id }}</button>
-                    </div>
-                    <div class="col-xl-8 col-lg-7 col-md-5 col-sm-4 col-xs-2">
-                        <a class="vs-link" href="{{ e.admin_url }}" target="_blank">{{ e.review_message }}</a>
-                    </div>
-                    
-                    <div class="col-1 d-flex justify-content-md-evenly">
-                        <button class="resolve-entry btn bg-vs-dblue" data-entry-id="{{ e.entry_id }}">Resolve</button>
-                        <button class="confirm-resolve clean-btn text-vs-dblue"
-                                data-process-id="{{p.process_id}}"
-                                data-entry-id="{{e.entry_id}}" 
-                                data-url="{% url 'ps_harvester:resolve_entry' pk=e.entry_id %}">
-                            <i class="bi bi-check-circle"></i>
-                        </button>
-                        <button class="cancel-resolve clean-btn text-vs-red" data-entry-id="{{e.entry_id}}" >
-                            <i class="bi bi-x-circle"></i>
-                        </button>
-                    </div>
-
-                    <div class="col-1" style="align-items: end;">
-                        <button class="delete-entry btn bg-vs-red" data-bs-toggle="modal" data-bs-target=".delete-entry-confirmation[data-entry-id='{{e.entry_id}}']">Delete</button>
                     </div>
                 </div>
                 {% endfor %}
@@ -185,40 +212,39 @@
     {% endfor %}
 </div>
 
-
-<div class="d-flex p-4 justify-content-center">
-    <ul class="pagination">
-        {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a href="?page={{ page_obj.previous_page_number }}" class="page-link">Previous</a>
-            </li>
-        {% else %}
-            <li class="page-item disabled"><a class="page-link">Previous</a></li>
-        {% endif %}
-
-        {% for i in custom_elided_page_range %}
-            {% if page_obj.number == i %}
-                <li class="page-item"><span class="page-link">{{ i }}</span></li>
-
+{% if processes_with_entries %}
+    <div class="d-flex p-4 justify-content-center">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a href="?page={{ page_obj.previous_page_number }}" class="page-link">Previous</a>
+                </li>
             {% else %}
-                {% if i == page_obj.paginator.ELLIPSIS %}
-                    <li class="page-item"><span class="page-link page-link-num">{{ i }}</span></li>
-                {% else %}
-                    <li class="page-item"><a class="page-link page-link-num" href="?page={{ i }}">{{ i }}</a></li>
-                {% endif %}
+                <li class="page-item disabled"><a class="page-link">Previous</a></li>
             {% endif %}
-        {% endfor %}
 
-        {% if page_obj.has_next %}
-        <li class="page-item">
-            <a href="?page={{ page_obj.next_page_number }}" class="page-link">Next</a>
-        </li>
-        {% else %}
-            <li class="page-item disabled"><a class="page-link">Next</a></li>
-        {% endif %}
+            {% for i in custom_elided_page_range %}
+                {% if page_obj.number == i %}
+                    <li class="page-item"><span class="page-link">{{ i }}</span></li>
 
-    
-    </ul>
-</div>
+                {% else %}
+                    {% if i == page_obj.paginator.ELLIPSIS %}
+                        <li class="page-item"><span class="page-link page-link-num">{{ i }}</span></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link page-link-num" href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a href="?page={{ page_obj.next_page_number }}" class="page-link">Next</a>
+            </li>
+            {% else %}
+                <li class="page-item disabled"><a class="page-link">Next</a></li>
+            {% endif %}
+        </ul>
+    </div>
+{% endif %}
 {% endblock %}
 

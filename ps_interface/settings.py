@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ps_harvester'
+    'ps_harvester',
+    'ps_users',
+    'ps_auth',
 ]
 
 MIDDLEWARE = [
@@ -57,7 +59,10 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / 'templates',
-                 BASE_DIR / 'ps_harvester/templates'],
+                 BASE_DIR / 'ps_harvester/templates',
+                 BASE_DIR / 'ps_users/templates',
+                 BASE_DIR / 'ps_auth/templates'],
+                 
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -103,6 +108,11 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+AUTHENTICATION_BACKENDS = [
+    'ps_auth.backends.PSDualAuthBackend',
+]
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -121,6 +131,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
+    BASE_DIR / 'ps_harvester/static'
 ]
 
 
@@ -132,3 +143,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
+# https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#auth-custom-user
+AUTH_USER_MODEL = 'ps_auth.PSUser'
+
+
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'ps_auth:login'
