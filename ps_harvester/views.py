@@ -12,7 +12,7 @@ from django.views.generic import (View,
                                   FormView,
                                   )
 
-from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 
 
 from ps_harvester.file_harvest import (main as file_harvest,
@@ -29,7 +29,9 @@ from ps_harvester.models import (HarvestProcess,
                                  )
 
 
-class HarvestProcessView(ListView):
+class HarvestProcessView(LoginRequiredMixin, ListView):
+
+    login_url = reverse_lazy('ps_auth:login')
 
     template_name = 'ps_harvester/harvester.html'
     context_object_name = 'processes_with_entries'
@@ -62,7 +64,9 @@ class HarvestProcessView(ListView):
         return context
 
 
-class EditProcessNotes(UpdateView):
+class EditProcessNotes(LoginRequiredMixin, UpdateView):
+
+    login_url = reverse_lazy('ps_auth:login')
 
     template_name = 'ps_harvester/harvester.html'
     context_object_name = 'edit_process_notes'
@@ -85,7 +89,9 @@ class EditProcessNotes(UpdateView):
             return JsonResponse({'msg': error_msg})
 
 
-class EditEntryNotes(UpdateView):
+class EditEntryNotes(LoginRequiredMixin, UpdateView):
+
+    login_url = reverse_lazy('ps_auth:login')
 
     template_name = 'ps_harvester/harvester.html'
     context_object_name = 'edit_entry_notes'
@@ -108,7 +114,9 @@ class EditEntryNotes(UpdateView):
             return JsonResponse({'msg': error_msg})
 
 
-class ResolveHarvestEntry(View):
+class ResolveHarvestEntry(PermissionRequiredMixin, View):
+
+    permission_required = ["ps_harvester.change_harvestentryspeech",]
 
     def post(self, request, pk):
         e = HarvestEntrySpeech.objects.get(entry_id=pk)
@@ -117,7 +125,9 @@ class ResolveHarvestEntry(View):
         return JsonResponse({'process_status': process_status})
 
 
-class DeleteHarvestEntry(View):
+class DeleteHarvestEntry(PermissionRequiredMixin, View):
+
+    permission_required = ["ps_harvester.delete_harvestentryspeech",]
 
     def post(self, request, pk):
         e = HarvestEntrySpeech.objects.get(entry_id=pk)
@@ -126,7 +136,10 @@ class DeleteHarvestEntry(View):
         return JsonResponse({'process_status': process_status})
 
 
-class FileHarvester(FormView):
+class FileHarvester(PermissionRequiredMixin, FormView):
+
+    permission_required = ["ps_harvester.add_harvestentryspeech", 
+                           "ps_harvester.add_harvestprocess",]
 
     template_name = "ps_harvester/file_harvester.html"
     form_class = HarvestFilesForm

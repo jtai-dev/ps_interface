@@ -148,6 +148,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#auth-custom-user
 AUTH_USER_MODEL = 'ps_auth.PSUser'
 
-
+LOGIN_URL  = 'ps_auth:login'
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'ps_auth:login'

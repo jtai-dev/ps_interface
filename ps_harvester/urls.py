@@ -2,7 +2,9 @@ from django.urls import path
 
 from ps_harvester import views
 
+
 app_name = 'ps_harvester'
+
 
 urlpatterns = [
     path('', view=views.HarvestProcessView.as_view(), name='harvester'),

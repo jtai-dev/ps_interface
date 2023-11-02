@@ -98,3 +98,7 @@ class HarvestEntrySpeech(models.Model):
     @property
     def admin_url(self):
         return f"https://admin.votesmart.org/loadCandidateSpeechDetail.do?candidateSpeechId={self.speech_candidate_id}"
+
+
+if __name__ == '__main__':
+    print(HarvestEntrySpeech.__name__)

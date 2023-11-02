@@ -19,6 +19,8 @@ from django.urls import path, include
 
 from ps_interface import views
 
+handler403 = views.PermissionDeniedView.as_view()
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', view=views.index, name='index'),
