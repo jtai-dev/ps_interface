@@ -24,7 +24,7 @@ with open(BASE_DIR / '.SECRETKEY', 'r') as f:
     SECRET_KEY = encoding.force_str(f.read())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
