@@ -131,9 +131,8 @@ dmypy.json
 
 # Custom
 .DS_Store
-.SECRETKEY
-ps_automation
 .vscode/
 connection_info.json
 migrations/
 media/uploads/harvest/
+.pgpass
