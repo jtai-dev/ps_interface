@@ -31,9 +31,9 @@
     color: #FFFFFF;
 }
 
-.bg-vs-white {
-    background-color: #FFFFFF;
+.bg-vs-white{
     color: #333366;
+    background-color: #FFFFFF;
 }
 
 .underlined-btn {
@@ -106,6 +106,12 @@
 #sidebar .nav-link:focus {
     color: #ADC7D4;
 }
+
+.page-link:hover {
+    color: #FFFFFF;
+    background-color: #ADC7D4;
+}
+
 /* ===================== */
 
 body {
