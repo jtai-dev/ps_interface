@@ -1,0 +1,41 @@
+.accordion-button:not(.collapsed),
+.accordion-button:hover{
+    background: linear-gradient(to right, #ADC7D4, #FFFFFF);
+    background-size: 500% 500%;
+    animation: subtle-gradient 1.5s infinite;
+}
+
+.confirm-resolve-entry,
+.cancel-resolve-entry {
+    font-size: 2.0rem;
+    display: none;
+}
+
+.confirm-resolve-entry:hover,
+.cancel-resolve-entry:hover {
+    color: #ADC7D4;
+    cursor: pointer;
+}
+
+.complete-status {
+    color: #20c997;
+    font-weight: bold;
+}
+
+.invalid-status {
+    color: #adb5bd;
+    font-weight: bold;
+}
+
+.review-status {
+    color: #333366;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.error-status {
+    color: #EE3E37;
+    text-decoration: underline;
+    font-weight: bold;
+}
+

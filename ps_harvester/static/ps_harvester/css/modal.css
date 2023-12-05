@@ -1,0 +1,14 @@
+.pvsdb-delete.form-check-input:checked {
+    background-color: #EE3E37;
+    border-color: black;
+}
+
+.pvsdb-delete.form-check-input:not(:checked) {
+    background-color: #FFFFFF;
+    border-color: black;
+}
+
+.pvsdb-delete.form-check-input::before {
+    background-color: #FFFFFF;
+    border-color: black;
+}

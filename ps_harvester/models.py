@@ -15,10 +15,6 @@ class HarvestStatus(models.Model):
         return f"{self.status_id}-{self.status_name}"
 
 
-class HarvestProcessManager(models.Manager):
-    pass
-
-
 class HarvestProcess(models.Model):
 
     process_id = models.BigAutoField(primary_key=True)
@@ -92,13 +88,13 @@ class HarvestEntrySpeech(models.Model):
 
     def resolve(self):
         self.review = False
-        self.review_message = ""
         self.save()
+    
+    def unresolve(self):
+        self.review = True
+        self.save()
+
 
     @property
     def admin_url(self):
         return f"https://admin.votesmart.org/loadCandidateSpeechDetail.do?candidateSpeechId={self.speech_candidate_id}"
-
-
-if __name__ == '__main__':
-    print(HarvestEntrySpeech.__name__)

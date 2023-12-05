@@ -7,8 +7,10 @@ from collections import defaultdict
 from datetime import datetime
 
 # External packages & libraries
-import pg8000
-from pg8000.exceptions import DatabaseError, InterfaceError
+import psycopg
+from psycopg.errors import DatabaseError, InterfaceError
+from decouple import config
+
 from ps_harvester.json_model import CondensedHarvests
 
 
@@ -23,7 +25,8 @@ class HarvestError(Exception):
         return "".join(traceback.format_exception(self._parent))
 
 
-def insert_into_speech(cursor: pg8000.Cursor, *values):
+def insert_into_speech(cursor, *values):
+
     try:
 
         cursor.execute(
@@ -39,7 +42,7 @@ def insert_into_speech(cursor: pg8000.Cursor, *values):
     return cursor.fetchone()
 
 
-def insert_into_speech_candidate(cursor: pg8000.Cursor, *values):
+def insert_into_speech_candidate(cursor, *values):
 
     try:
         cursor.execute(
@@ -56,6 +59,7 @@ def insert_into_speech_candidate(cursor: pg8000.Cursor, *values):
 
 
 def get_connection_info():
+
     PACKAGE_DIR = Path(__file__).parent.parent
     CONNECTION_INFO_FILEPATH = PACKAGE_DIR / 'connection_info.json'
 
@@ -67,12 +71,15 @@ def get_connection_info():
 
 def establish_connection():
 
-    connection = None
-    connection_info = get_connection_info()
+    connection_info = {'host': config('VS_DB_HOST', default='localhost'),
+                       'port': config('VS_DB_PORT', default=5432, cast=int),
+                       'dbname': config('VS_DB_NAME', default='postgres'),
+                       'user': config('VS_DB_USER', default=''),
+                       'password': config('VS_DB_PASSWORD', default='')}
 
     try:
         # This would be the connection to the PVS database
-        connection = pg8000.connect(**connection_info, timeout=10)
+        connection = psycopg.connect(**connection_info, timeout=10)
         return connection
 
     except (DatabaseError, InterfaceError) as e:
@@ -81,6 +88,7 @@ def establish_connection():
 
 
 def process_json_strings(json_strings: list[str]):
+
     contents = []
     try:
         for js in json_strings:

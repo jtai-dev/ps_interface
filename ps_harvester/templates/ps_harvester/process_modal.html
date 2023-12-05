@@ -1,0 +1,40 @@
+<!-- Modal: Process Notes -->
+<div class="process-notes modal fade" 
+     data-process-id="{{ process.pk }}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 text-vs-dblue">Harvest Process Notes</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <textarea disabled 
+                            class="form-control" 
+                            data-url="{% url 'ps_harvester:harvest_process_note' pk=process.pk %}"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-vs-dblue edit-btn">Edit</button>
+                <button type="button" class="btn bg-vs-red" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>  
+</div>
+
+<!-- Modal: Process Error -->
+<div class="process-error modal fade" 
+     data-process-id="{{ process.pk }}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 text-vs-dblue">Error Processing</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-vs-dblue">
+                <p>{{ process.error_msg }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-vs-red" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
