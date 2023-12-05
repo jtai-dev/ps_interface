@@ -1,0 +1,15 @@
+.confirm-unresolve-entry, 
+.cancel-unresolve-entry {
+    font-size: 2.0rem;
+    display: none;
+}
+
+.confirm-unresolve-entry:hover,
+.cancel-unresolve-entry:hover {
+    color: #ADC7D4;
+    cursor: pointer;
+}
+
+.harvest-entry{
+    border-bottom: 1px solid #ddd;
+}
