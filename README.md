@@ -74,6 +74,7 @@ Package            Version
 Django             4.2.*
 pg8000             1.30.*
 ps-automation      1.0.*
+python-decouple    3.0*
 ...
 ```
 
@@ -81,27 +82,18 @@ The program may not work correctly if the above packages have not been installed
 
 <br>
 
-### 3. Patching source code with files
+### 3. Configuring Environmental Variables
 --------------------------------------
-The files will be send as a separate file due to it containing user credentials that is read-in by the web application. As such, are the SECRET_KEY to Django web application database and the connection info to the PVS database. I will note the examples of how these files will be structured. All of these files are ignored from the version control.
+In the parent directory (where the requirements.txt and LICENSE reside), will contain the following file:
 
-In the parent directory of the source code (where the requirements.txt and LICENSE reside), will contain the following files:
+### .env
 
-### connection_info.json
-```json
-{
-    "host":"",
-    "database": "",
-    "port": 5432,
-    "user": "",
-    "password": ""
-}
-```
+The .env file contains variables such as the SECRETKEY and connection info to the VoteSmart's database.
 
-### .SECRETKEY
-```
-django-*blah blah(I am secret)
-```
+### Some useful links:
+
+[Postgres on Django](https://docs.djangoproject.com/en/4.2/ref/databases/#postgresql-connection-settings)
+
 
 <br>
 
@@ -157,7 +149,20 @@ http://127.0.0.1:8000
 
 <br>
 
-### 3. Managing & Maintenence (optional)
+### 3. Static Files Filepath
+-----------------------------
+
+Here are the links to the static files:
+
+#### *{project_directory}*/static
+#### *{project_directory}*/ps_auth/static
+#### *{project_directory}*/ps_harvester/static
+#### *{project_directory}*/ps_user/static
+
+<br>
+
+
+### 4. Managing & Maintenence
 ----------------------------------------
 The web application database may require some maintenance such as creation of new users, deletion of users, and altering uploaded information, etc. A superuser manages and handles these tasks. 
 

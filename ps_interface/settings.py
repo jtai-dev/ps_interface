@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-import json
 from pathlib import Path
 from decouple import config
 
@@ -39,9 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ps_harvester',
-    'ps_users',
+    # ps_auth must before ps_users
     'ps_auth',
+    'ps_users',
+    'ps_harvester',
 ]
 
 MIDDLEWARE = [
@@ -81,16 +81,28 @@ WSGI_APPLICATION = 'ps_interface.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+# https://docs.djangoproject.com/en/4.2/ref/databases/#postgresql-connection-settings
 
 DATABASES = {
     'default': {
-        'ENGINE': config('DB_ENGINE', default='django.db.backends.sqlite3'),
-        'NAME': config('DB_NAME', default=BASE_DIR / 'db.sqlite3'),
-        ## Here below are connection to any db other than sqlite
-        # 'HOST': config('DB_HOST', default=""),
-        # 'USER': config('DB_USER', default=""),
-        # 'PORT': config('DB_PORT', default=""),
-        # 'OPTIONS': config('', default="{}", cast=json.loads)
+        'ENGINE': "django.db.backends.postgresql",
+        'OPTIONS': {
+            'service': "my_service",
+            # 'passfile': '.pg_pass'
+        }
+        
+        ## Below are configuration for SQLite3
+        # 'ENGINE': config('DB_ENGINE', default='django.db.backends.sqlite3'),
+        # 'NAME': config('DB_NAME', default=BASE_DIR / 'db.sqlite3'),
+        
+        ## For postgresql testing:
+        # 'HOST': config('DB_HOST'),
+        # 'USER': config('DB_USER'),
+        # 'PORT': config('DB_PORT'),
+        # 'NAME': config('DB_NAME'),
+        # 'OPTIONS': {
+        #   'service': 'test_application_db'
+        # }
     }
 }
 

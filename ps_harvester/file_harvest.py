@@ -76,10 +76,9 @@ def establish_connection():
                        'dbname': config('VS_DB_NAME', default='postgres'),
                        'user': config('VS_DB_USER', default=''),
                        'password': config('VS_DB_PASSWORD', default='')}
-
     try:
         # This would be the connection to the PVS database
-        connection = psycopg.connect(**connection_info, timeout=10)
+        connection = psycopg.connect(**connection_info)
         return connection
 
     except (DatabaseError, InterfaceError) as e:
