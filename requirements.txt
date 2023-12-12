@@ -1,5 +1,5 @@
 Django>=4.2, <5.0
 Pillow
-pg8000
+psycopg
 python-decouple
 # git+ssh://git@github.com/jtai-dev/ps_automation.git#egg=ps_automation

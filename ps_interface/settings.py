@@ -91,11 +91,7 @@ DATABASES = {
             # 'passfile': '.pg_pass'
         }
         
-        ## Below are configuration for SQLite3
-        # 'ENGINE': config('DB_ENGINE', default='django.db.backends.sqlite3'),
-        # 'NAME': config('DB_NAME', default=BASE_DIR / 'db.sqlite3'),
-        
-        ## For postgresql testing:
+        ## For testing use:
         # 'HOST': config('DB_HOST'),
         # 'USER': config('DB_USER'),
         # 'PORT': config('DB_PORT'),
