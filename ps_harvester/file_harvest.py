@@ -28,16 +28,15 @@ class HarvestError(Exception):
 def insert_into_speech(cursor, *values):
 
     try:
-
         cursor.execute(
             "INSERT INTO speech (speechtype_id, title, speechdate, location, speechtext, url, created)"
             "VALUES (%s, %s, %s, %s, %s, %s, %s)"
             "RETURNING speech_id",
-            values),
+            values,
+        ),
 
     except (DatabaseError, InterfaceError) as e:
-        raise HarvestError('Failed to create speech entry.',
-                           parent=e)
+        raise HarvestError("Failed to create speech entry.", parent=e)
 
     return cursor.fetchone()
 
@@ -49,11 +48,11 @@ def insert_into_speech_candidate(cursor, *values):
             "INSERT INTO speech_candidate (speech_id, candidate_id, created)"
             "VALUES (%s, %s, %s)"
             "RETURNING speech_candidate_id",
-            values)
+            values,
+        )
 
     except (DatabaseError, InterfaceError) as e:
-        raise HarvestError('Failed to link candidates with speech entry.',
-                           parent=e)
+        raise HarvestError("Failed to link candidates with speech entry.", parent=e)
 
     return cursor.fetchone()
 
@@ -61,9 +60,9 @@ def insert_into_speech_candidate(cursor, *values):
 def get_connection_info():
 
     PACKAGE_DIR = Path(__file__).parent.parent
-    CONNECTION_INFO_FILEPATH = PACKAGE_DIR / 'connection_info.json'
+    CONNECTION_INFO_FILEPATH = PACKAGE_DIR / "connection_info.json"
 
-    with open(CONNECTION_INFO_FILEPATH, 'r') as f:
+    with open(CONNECTION_INFO_FILEPATH, "r") as f:
         connection_info = json.load(f)
 
     return connection_info
@@ -71,19 +70,20 @@ def get_connection_info():
 
 def establish_connection():
 
-    connection_info = {'host': config('VS_DB_HOST', default='localhost'),
-                       'port': config('VS_DB_PORT', default=5432, cast=int),
-                       'dbname': config('VS_DB_NAME', default='postgres'),
-                       'user': config('VS_DB_USER', default=''),
-                       'password': config('VS_DB_PASSWORD', default='')}
+    connection_info = {
+        "host": config("VS_DB_HOST", default="localhost"),
+        "port": config("VS_DB_PORT", default=5432, cast=int),
+        "dbname": config("VS_DB_NAME", default="postgres"),
+        "user": config("VS_DB_USER", default=""),
+        "password": config("VS_DB_PASSWORD", default=""),
+    }
     try:
         # This would be the connection to the PVS database
         connection = psycopg.connect(**connection_info)
         return connection
 
     except (DatabaseError, InterfaceError) as e:
-        raise HarvestError("Failed to establish database connection.",
-                           parent=e)
+        raise HarvestError("Failed to establish database connection.", parent=e)
 
 
 def process_json_strings(json_strings: list[str]):
@@ -114,27 +114,32 @@ def main(file_contents):
 
     for harvest in harvest_json.all:
         # speech_id is not shared at the moment
-        speech_id = insert_into_speech(cursor,
-                                       harvest.speechtype_id,
-                                       harvest.title,
-                                       harvest.speechdate,
-                                       harvest.location,
-                                       harvest.speechtext if harvest.speechtext else "",
-                                       harvest.url,
-                                       str(datetime.now()))[0]
+        speech_id = insert_into_speech(
+            cursor,
+            harvest.speechtype_id,
+            harvest.title,
+            harvest.speechdate,
+            harvest.location,
+            harvest.speechtext if harvest.speechtext else "",
+            harvest.url,
+            str(datetime.now()),
+        )[0]
 
         speech_to_candidate[speech_id].add(harvest)
 
     for speech_id, harvests in speech_to_candidate.items():
         for harvest in harvests:
-            speech_candidate_id = insert_into_speech_candidate(cursor,
-                                                               speech_id,
-                                                               harvest.candidate_id,
-                                                               str(datetime.now()))[0]
+            speech_candidate_id = insert_into_speech_candidate(
+                cursor, speech_id, harvest.candidate_id, str(datetime.now())
+            )[0]
 
-            speech_candidate_to_harvest[speech_candidate_id]['candidate_id'] = harvest.candidate_id
-            speech_candidate_to_harvest[speech_candidate_id]['review'] = harvest.review
-            speech_candidate_to_harvest[speech_candidate_id]['review_message'] = harvest.review_message
+            speech_candidate_to_harvest[speech_candidate_id][
+                "candidate_id"
+            ] = harvest.candidate_id
+            speech_candidate_to_harvest[speech_candidate_id]["review"] = harvest.review
+            speech_candidate_to_harvest[speech_candidate_id][
+                "review_message"
+            ] = harvest.review_message
 
     connection.commit()
 

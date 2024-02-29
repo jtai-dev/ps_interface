@@ -132,7 +132,6 @@ dmypy.json
 # Custom
 .DS_Store
 .vscode/
-connection_info.json
+.pgpass
 migrations/
 media/uploads/harvest/
-.pgpass

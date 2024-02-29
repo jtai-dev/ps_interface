@@ -26,7 +26,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 
-ALLOWED_HOSTS = ['127.0.0.1',]
+ALLOWED_HOSTS = ['127.0.0.1', ]
 
 
 # Application definition
@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # ps_auth must before ps_users
+    # IMPORTANT: ps_auth must before ps_users
     'ps_auth',
     'ps_users',
     'ps_harvester',
@@ -78,7 +78,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ps_interface.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 # https://docs.djangoproject.com/en/4.2/ref/databases/#postgresql-connection-settings
@@ -86,19 +85,10 @@ WSGI_APPLICATION = 'ps_interface.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': "django.db.backends.postgresql",
-        'OPTIONS': {
-            'service': "my_service",
-            # 'passfile': '.pg_pass'
-        }
-        
-        ## For testing use:
-        # 'HOST': config('DB_HOST'),
-        # 'USER': config('DB_USER'),
-        # 'PORT': config('DB_PORT'),
-        # 'NAME': config('DB_NAME'),
-        # 'OPTIONS': {
-        #   'service': 'test_application_db'
-        # }
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT'),
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
     }
 }
 
