@@ -138,7 +138,7 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
     BASE_DIR / 'ps_harvester/static',
     BASE_DIR / 'ps_auth/static',
-    BASE_DIR / 'ps_user/static',
+    BASE_DIR / 'ps_users/static',
 ]
 
 
