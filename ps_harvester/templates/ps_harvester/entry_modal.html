@@ -1,51 +1,43 @@
 <!-- Modal: Entry Notes -->
-<div class="speech-entry-notes modal fade" data-entry-id="{{ entry_id }}" >
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5 text-vs-dblue">Harvest Entry Notes</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body text-vs-dblue">
-                <textarea disabled 
-                          class="form-control"
-                          data-url="{% url 'ps_harvester:harvest_entry_note' pk=entry_id %}"></textarea>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn edit-btn bg-vs-dblue">Edit</button>
-                <button type="button" class="btn bg-vs-red" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
+<div class="speech-entry-notes modal fade" data-entry-id="{{ entry_id }}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 text-vs-dblue">Harvest Entry Notes</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-vs-dblue">
+        <textarea disabled class="form-control" data-url="{% url 'ps_harvester:harvest_entry_note' pk=entry_id %}"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn edit-btn bg-vs-dblue">Edit</button>
+        <button type="button" class="btn bg-vs-red" data-bs-dismiss="modal">Close</button>
+      </div>
     </div>
+  </div>
 </div>
 
 <!-- Modal: Delete Entry -->
 <div class="delete-entry-confirmation modal fade" data-entry-id="{{ entry_id }}">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5 text-vs-dblue">Delete Entry Confirmation</h1>
-                <button class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-check form-switch text-vs-dblue">
-                    <p>Deleting this entry will remove any association with the entry made to VoteSmart's database.</p>
-                    <p>In other words, the harvester will no longer retain any control over what has been imported to VoteSmart's database.</p>
-                    <p>If you wish to also delete the entry made to VoteSmart's database, and to avoid the above, 
-                        please toggle the button below.</p>
-                    <label class="form-check-label" for="pvsdb-delete">Delete entry from VoteSmart's database</label>
-                    <input class="form-check-input pvsdb-delete" type="checkbox" role="switch">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="confirm-delete-entry btn bg-vs-red" 
-                        data-entry-id="{{ entry_id }}"
-                        data-process-id="{{ process_id }}"
-                        data-url="{% url 'ps_harvester:delete_entry' pk=entry_id %}"
-                        data-bs-dismiss="modal">Yes
-                </button>
-                <button type="button" class="btn bg-vs-dblue" data-bs-dismiss="modal">No</button>
-            </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 text-vs-dblue">Delete Entry Confirmation</h1>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-check form-switch text-vs-dblue">
+          <p>Deleting this entry will remove any association with the entry made to VoteSmart's database.</p>
+          <p>In other words, the harvester will no longer retain any control over what has been imported to VoteSmart's database.</p>
+          <p>If you wish to also delete the entry made to VoteSmart's database, and to avoid the above, please toggle the button below.</p>
+          <label class="form-check-label" for="pvsdb-delete">Delete entry from VoteSmart's database</label>
+          <input class="form-check-input pvsdb-delete" type="checkbox" role="switch" />
         </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="confirm-delete-entry btn bg-vs-red" data-entry-id="{{ entry_id }}" data-process-id="{{ process_id }}" data-url="{% url 'ps_harvester:delete_entry' pk=entry_id %}" data-bs-dismiss="modal">Yes</button>
+        <button type="button" class="btn bg-vs-dblue" data-bs-dismiss="modal">No</button>
+      </div>
     </div>
+  </div>
 </div>

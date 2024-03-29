@@ -1,20 +1,18 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content_container %}
-
-<h1>File Harvester</h1>
-<h4>Ideals are unattainable at times, in this case, you are just not able to schedule an automatic upload.</h4>
-<br>
-<h5><strong>Select a harvest templated JSON file to upload:</strong></h5>
-<form class="input-group" method="post" enctype="multipart/form-data"> 
+  <h1>File Harvester</h1>
+  <h4>Ideals are unattainable at times, in this case, you are just not able to schedule an automatic upload.</h4>
+  <br />
+  <h5><strong>Select a harvest templated JSON file to upload:</strong></h5>
+  <form class="input-group" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <input type="file" class="form-control" name="{{ form.files.name }}" multiple>
+    <input type="file" class="form-control" name="{{ form.files.name }}" multiple />
     <button class="btn btn-outline-secondary" type="submit">Upload</button>
-</form>
-<br>
-<br>
-{% if form_upload_error %}
-    <h5 class="text-vs-red">{{form_upload_error}}</h5>
-{% endif %}
-
+  </form>
+  <br />
+  <br />
+  {% if form_upload_error %}
+    <h5 class="text-vs-red">{{ form_upload_error }}</h5>
+  {% endif %}
 {% endblock %}

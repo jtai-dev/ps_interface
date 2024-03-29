@@ -14,6 +14,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include
 
@@ -22,9 +23,9 @@ from ps_interface import views
 handler403 = views.PermissionDeniedView.as_view()
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', view=views.index, name='index'),
-    path('harvester/', include('ps_harvester.urls'), name='ps_harvester'),
-    path('auth/', include('ps_auth.urls'), name='auth'),
-    path('users/', include('ps_users.urls'), name='users')
+    path("django-admin/", admin.site.urls),
+    path("", view=views.index, name="index"),
+    path("harvester/", include("ps_harvester.urls"), name="ps_harvester"),
+    path("auth/", include("ps_auth.urls"), name="auth"),
+    path("users/", include("ps_users.urls"), name="users"),
 ]

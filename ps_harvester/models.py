@@ -1,4 +1,3 @@
-
 from django.db import models
 
 
@@ -18,8 +17,7 @@ class HarvestStatus(models.Model):
 class HarvestProcess(models.Model):
 
     process_id = models.BigAutoField(primary_key=True)
-    status = models.ForeignKey(
-        HarvestStatus, default=2, on_delete=models.PROTECT)
+    status = models.ForeignKey(HarvestStatus, default=2, on_delete=models.PROTECT)
     notes = models.TextField(null=True, default="")
     error_msg = models.TextField(null=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -27,16 +25,16 @@ class HarvestProcess(models.Model):
 
     def refresh_status(self):
 
-        if self.status.status_name != 'ERROR':
+        if self.status.status_name != "ERROR":
             if self.harvestentryspeech_set:
                 if not self.harvestentryspeech_set.filter(review=True):
-                    self.status = HarvestStatus.objects.get(
-                        status_name='COMPLETE')
+                    self.status = HarvestStatus.objects.get(status_name="COMPLETE")
                 else:
                     self.status = HarvestStatus.objects.get(
-                        status_name='PENDING REVIEW')
+                        status_name="PENDING REVIEW"
+                    )
             else:
-                self.status = HarvestStatus.objects.get(status_name='INCOMPLETE')
+                self.status = HarvestStatus.objects.get(status_name="INCOMPLETE")
 
         self.save()
 
@@ -45,15 +43,16 @@ class HarvestProcess(models.Model):
 
 class HarvestFile(models.Model):
     file_id = models.BigAutoField(primary_key=True)
-    filepath = models.FileField('uploads/harvest/')
+    filepath = models.FileField("uploads/harvest/")
     process = models.ForeignKey(HarvestProcess, on_delete=models.CASCADE)
     upload_timestamp = models.DateTimeField(auto_now_add=True)
 
     @property
     def file_content(self) -> str:
         if self.filepath.multiple_chunks():
-            file_bytes_decoded = "".join([chunk.decode()
-                                          for chunk in self.filepath.chunks()])
+            file_bytes_decoded = "".join(
+                [chunk.decode() for chunk in self.filepath.chunks()]
+            )
             self.filepath.delete()
             return file_bytes_decoded
 
@@ -76,7 +75,8 @@ class HarvestEntrySpeech(models.Model):
     # Identifier for each statements entry on VoteSmart's Admin
     speech_candidate_id = models.BigIntegerField(editable=False)
     process = models.ForeignKey(
-        HarvestProcess, on_delete=models.CASCADE, editable=False)
+        HarvestProcess, on_delete=models.CASCADE, editable=False
+    )
     review = models.BooleanField(default=False)
     review_message = models.TextField(null=True)
     notes = models.TextField(null=True, default="")
@@ -89,11 +89,10 @@ class HarvestEntrySpeech(models.Model):
     def resolve(self):
         self.review = False
         self.save()
-    
+
     def unresolve(self):
         self.review = True
         self.save()
-
 
     @property
     def admin_url(self):

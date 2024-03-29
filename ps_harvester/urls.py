@@ -3,18 +3,58 @@ from django.urls import path
 from ps_harvester import views
 
 
-app_name = 'ps_harvester'
+app_name = "ps_harvester"
 
 
 urlpatterns = [
-    path('', view=views.HarvestProcessList.as_view(), name='harvester'),
-    path('file', view=views.FileHarvester.as_view(), name='file_harvester'),
-    path('web', view=views.web_harvester, name='web_harvester'),
-    path('process/<int:pk>', view=views.HarvestProcessDetail.as_view(), name='harvest_process'),
-    path('process/<int:pk>/note', view=views.EditProcessNotes.as_view(), name='harvest_process_note'),
-    path('process/<int:pk>/delete', view=views.DeleteHarvestProcess.as_view(), name='delete_process'),
-    path('entry/<int:pk>/note', view=views.EditEntryNotes.as_view(), name='harvest_entry_note'),
-    path('entry/<int:pk>/resolve', view=views.ResolveHarvestEntry.as_view(), name='resolve_entry'),
-    path('entry/<int:pk>/unresolve', view=views.UnresolveHarvestEntry.as_view(), name='unresolve_entry'),
-    path('entry/<int:pk>/delete', view=views.DeleteHarvestEntry.as_view(), name='delete_entry'),
+    path(
+        "",
+        view=views.HarvestProcessList.as_view(),
+        name="harvester",
+    ),
+    path(
+        "file",
+        view=views.FileHarvester.as_view(),
+        name="file_harvester",
+    ),
+    path(
+        "web",
+        view=views.web_harvester,
+        name="web_harvester",
+    ),
+    path(
+        "process/<int:pk>",
+        view=views.HarvestProcessDetail.as_view(),
+        name="harvest_process",
+    ),
+    path(
+        "process/<int:pk>/note",
+        view=views.EditProcessNotes.as_view(),
+        name="harvest_process_note",
+    ),
+    path(
+        "process/<int:pk>/delete",
+        view=views.DeleteHarvestProcess.as_view(),
+        name="delete_process",
+    ),
+    path(
+        "entry/<int:pk>/note",
+        view=views.EditEntryNotes.as_view(),
+        name="harvest_entry_note",
+    ),
+    path(
+        "entry/<int:pk>/resolve",
+        view=views.ResolveHarvestEntry.as_view(),
+        name="resolve_entry",
+    ),
+    path(
+        "entry/<int:pk>/unresolve",
+        view=views.UnresolveHarvestEntry.as_view(),
+        name="unresolve_entry",
+    ),
+    path(
+        "entry/<int:pk>/delete",
+        view=views.DeleteHarvestEntry.as_view(),
+        name="delete_entry",
+    ),
 ]

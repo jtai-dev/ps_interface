@@ -1,17 +1,15 @@
 # Built-ins
 import json
 import traceback
-
-from pathlib import Path
-from collections import defaultdict
 from datetime import datetime
+from collections import defaultdict
 
 # External packages & libraries
 import psycopg
 from psycopg.errors import DatabaseError, InterfaceError
 from decouple import config
 
-from ps_harvester.json_model import CondensedHarvests
+from ps_harvester.fileharvest.json_model import HarvestArticles
 
 
 class HarvestError(Exception):
@@ -57,25 +55,14 @@ def insert_into_speech_candidate(cursor, *values):
     return cursor.fetchone()
 
 
-def get_connection_info():
-
-    PACKAGE_DIR = Path(__file__).parent.parent
-    CONNECTION_INFO_FILEPATH = PACKAGE_DIR / "connection_info.json"
-
-    with open(CONNECTION_INFO_FILEPATH, "r") as f:
-        connection_info = json.load(f)
-
-    return connection_info
-
-
 def establish_connection():
 
     connection_info = {
-        "host": config("VS_DB_HOST", default="localhost"),
-        "port": config("VS_DB_PORT", default=5432, cast=int),
-        "dbname": config("VS_DB_NAME", default="postgres"),
-        "user": config("VS_DB_USER", default=""),
-        "password": config("VS_DB_PASSWORD", default=""),
+        "host": config("VSDB_HOST", default="localhost"),
+        "port": config("VSDB_PORT", default=5432, cast=int),
+        "dbname": config("VSDB_NAME", default="postgres"),
+        "user": config("VSDB_USER", default=""),
+        "password": config("VSDB_PASSWORD", default=""),
     }
     try:
         # This would be the connection to the PVS database
@@ -103,7 +90,7 @@ def process_json_strings(json_strings: list[str]):
 
 def main(file_contents):
 
-    harvest_json = CondensedHarvests(process_json_strings(file_contents))
+    harvest_json = HarvestArticles(process_json_strings(file_contents))
 
     connection = establish_connection()
 
