@@ -136,4 +136,4 @@ dmypy.json
 migrations/
 media/uploads/harvest/
 uwsgi_params
-all_static/
+staticfiles/
