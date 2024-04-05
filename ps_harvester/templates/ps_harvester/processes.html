@@ -110,7 +110,7 @@
 
                     <!-- Message to be reviewed -->
                     <div class="col-xl-8 col-lg-7 col-md-5 col-sm-4 col-xs-2">
-                        <a class="vs-link" href="{{ e.admin_url }}" target="_blank">{{ e.review_message }}</a>
+                        <a class="vs-link" href="{% url 'ps_pvsadmin:speech_by_candidate' speech_candidate_id=e.speech_candidate_id candidate_id=e.candidate_id %}" target="_blank">{{ e.review_message }}</a>
                     </div>
                     
                     <!-- Resolve Button -->

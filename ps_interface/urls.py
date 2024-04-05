@@ -21,6 +21,7 @@ from django.urls import path, include
 from ps_interface import views
 
 handler403 = views.PermissionDeniedView.as_view()
+handler404 = views.PageNotFoundView.as_view()
 
 urlpatterns = [
     path("django-admin/", admin.site.urls),
@@ -28,4 +29,5 @@ urlpatterns = [
     path("harvester/", include("ps_harvester.urls"), name="ps_harvester"),
     path("auth/", include("ps_auth.urls"), name="auth"),
     path("users/", include("ps_users.urls"), name="users"),
+    path("pvsadmin/", include("ps_pvsadmin.urls"), name="pvsadmin"),
 ]
