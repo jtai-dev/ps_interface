@@ -211,6 +211,7 @@ class FileHarvester(PermissionRequiredMixin, FormView):
                 for speech_candidate_id, harvest in speech_candidate_to_harvest.items():
                     HarvestEntrySpeech.objects.create(
                         process=process,
+                        candidate_id=harvest["candidate_id"],
                         speech_candidate_id=speech_candidate_id,
                         review=harvest["review"],
                         review_message=harvest["review_message"],

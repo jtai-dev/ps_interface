@@ -96,7 +96,7 @@
         </div>
 
         <div class="col-5">
-            <a class="vs-link" href="{{ e.admin_url }}" target="_blank">{{ e.review_message | default_if_none:"Nothing to review."}}</a>
+            <a class="vs-link" href="{% url 'ps_pvsadmin:speech_by_candidate' speech_candidate_id=e.speech_candidate_id candidate_id=e.candidate_id %}" target="_blank">{{ e.review_message | default_if_none:"Nothing to review."}}</a>
         </div>
 
         <div class="col-2">{{ e.modified }}</div>
