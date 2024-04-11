@@ -1,0 +1,123 @@
+/* @import url(assets.css); */
+
+body {
+    background: var(--vs-gradient);
+    background-size: 400% 400%;
+    animation: var(--vs-bg-animation);
+    overflow-x: hidden !important;
+    overflow-y: show !important;
+    color: var(--vs-white);
+}
+
+.auth-card {
+    background-color: var(--vs-bg-white);
+    color: var(--vs-dblue);
+    border-radius: 0.75rem;
+    margin-top: 8rem;
+    min-width: 550px;
+    max-width: 600px;
+}
+
+.auth-card input[type='submit'] {
+    background-color: var(--vs-dblue);
+    color: var(--vs-white);
+    padding: 1rem 3rem 1rem 3rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+
+}
+
+.auth-card input[type='submit']:hover {
+    background-color: var(--vs-lblue);
+    color: var(--vs-white);
+    border-color: var(--vs-bg-white);
+}
+
+.auth-card input[type='submit']:focus {
+    background-color: var(--vs-white);
+    color: var(--vs-lblue);
+    box-shadow: 0 0 0 0.2rem var(--vs-lblue);
+    border-color: var(--vs-bg-white);
+}
+
+.auth-card .card-footer {
+    background-color: inherit;
+    margin-top: 2rem;
+}
+
+.auth-card .card-footer i {
+    font-size: 1.2rem;
+}
+
+.auth-item {
+    margin: 0 4rem 2rem 4rem
+}
+
+.form-floating .form-control {
+    background-color: var(--vs-bg-white);
+    color: var(--vs-dblue);
+    border-color: var(--vs-dblue);
+    font-size: 1.2rem;
+}
+
+.form-floating .form-control.is-valid {
+    border-color: green;
+}
+
+.form-floating .form-control.is-invalid {
+    border-color: var(--vs-red);
+}
+
+.form-floating .form-control:focus {
+    border-color: var(--vs-lblue);
+    box-shadow: 0 0 0 0.2rem var(--vs-lblue);
+}
+
+.form-floating .form-control:focus~label {
+    transform: scale(0.85) translateY(-1.7rem) translateX(.15rem);
+    color: var(--vs-white);
+    font-size: 1.1rem;
+}
+
+.form-floating .form-control:focus~label:after {
+    background-color: var(--vs-lblue);
+    color: var(--vs-white);
+}
+
+.form-floating .form-control:not(:placeholder-shown)~label {
+    transform: scale(0.85) translateY(-1.7rem) translateX(.15rem);
+    font-size: 1.1rem;
+}
+
+.form-floating .form-control:not(:focus):placeholder-shown~label {
+    color: var(--vs-dblue);
+    opacity: 0.7;
+    font-size: 1.2rem;
+}
+
+.form-floating .form-control:not(:focus):not(:placeholder-shown)~label {
+    color: var(--vs-dblue);
+}
+
+.form-floating .form-control:not(:focus):not(:placeholder-shown)~label:after {
+    background-color: var(--vs-bg-white);
+}
+
+.reveal-pass input {
+    width: 16px;
+    height: 16px;
+}
+
+.reveal-pass input:hover {
+    cursor: pointer;
+}
+
+.reveal-pass input:checked {
+    accent-color: var(--vs-dblue);
+}
+
+.reveal-pass label{
+    font-size: 0.9rem;
+    font-style: italic;
+    margin-left: 0.5rem;
+}

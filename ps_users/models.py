@@ -19,3 +19,6 @@ class PSUserProfile(models.Model):
     @property
     def email(self):
         return self.user.email
+
+    def __str__(self) -> str:
+        return " ".join((self.first_name, self.last_name))

@@ -1,119 +1,125 @@
+@import url(assets.css);
 
-/* VS custom assets */
-.text-vs-lblue {
-    color: #ADC7D4;
+
+.main-body {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    column-gap: 10px;
+    height: 100vh;
+    background-color: var(--vs-bg-white);
 }
 
-.text-vs-dblue {
-    color: #333366;
-}
-
-.text-vs-red {
-    color: #EE3E37;
-}
-
-.text-vs-white {
-    color: #FFFFFF;
-}
-
-.bg-vs-red {
-    background-color: #EE3E37;
-    color: #FFFFFF;
-}
-
-.bg-vs-lblue {
-    background-color: #ADC7D4;
-    color: #FFFFFF;
-}
-
-.bg-vs-dblue {
-    background-color: #333366;
-    color: #FFFFFF;
-}
-
-.bg-vs-white{
-    color: #333366;
-    background-color: #FFFFFF;
-}
-
-.underlined-btn {
-    text-decoration: underline;
-    padding: 0%;
-    background: None;
-    border: None;
-}
-
-.clean-btn {
-    text-decoration: none;
-    padding: 0%;
-    background: none;
-    border: none;
-}
-
-.vs-link {
-    text-decoration: underline;
-    color: #333366;
-}
-
-.vs-link:hover {
-    color: #EE3E37;
-}
-/* ===================== */
-
-
-/* Base customization */
-@keyframes subtle-gradient {
-    0% {
-        background-position: 0% 20%;
-    }
-
-    50% {
-        background-position: 20% 0%;
-    }
-
-    100% {
-        background-position: 0% 20%;
-    }
-}
-
-#content-container {
-    color: #333366;
-}
-
-#sidebar {
-    background: linear-gradient(-220deg, #333366, #EE3E37, #ADC7D4);
-    color: #FFFFFF;
+.main-sidebar {
+    background: var(--vs-gradient);
     background-size: 400% 400%;
-    animation: subtle-gradient 5s ease infinite;
+    animation: var(--vs-bg-animation);
+    margin: 0.5rem;
+    border-radius: 0.75rem;
+    overflow-y: auto;
+    position:sticky;
+    top: 0;
+}
+
+.main-content {
+    color: var(--vs-dblue);
+    margin: 0.5rem;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.sidebar-wrapper {
     height: 100%;
-    width: 280px;
-    font-size: 18px;
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    color: var(--vs-white);
+    padding: 1rem;
+    font-size: 1.2rem;
 }
-/* ===================== */
 
+.sidebar-wrapper .nav-link {
+    color: inherit
+}
 
-/* Bootstrap customization */
+.content-wrapper{
+    padding-top: 0.5rem;
+    padding-right: 0.75rem;
+}
+
+.sidebar-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 5px;
+    font-size: 1.3rem;
+}
+
+.sidebar-header .nav-link:hover {
+    color: var(--vs-lblue);
+}
+
+.sidebar-body {
+    margin-top: 2rem;
+}
+
+.sidebar-body .nav {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+}
+
+.sidebar-body .nav-link:hover {
+    background-color: var(--vs-lblue);
+    cursor: pointer;
+}
+
+.sidebar-body .nav-link.active {
+    background-color: var(--vs-lblue);
+}
+
+[id$=-submenu] {
+    padding-left: 2rem;
+    font-size: 1.05rem;
+    font-weight: normal;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    padding-top: 0.5rem;
+    /* padding-left: 0.5rem; */
+}
+
+.sidebar-footer .nav-link:hover {
+    color: var(--vs-lblue);
+}
+
+.user-menu .nav-link i {
+    font-size: 2rem;
+}
+
+.user-menu .dropdown-menu {
+    background-color: var(--vs-bg-white);
+    font-size: 1.2rem;
+}
+
+.user-menu .dropdown-menu i {
+    font-size: 1.5rem;
+}
+
+.user-menu .dropdown-menu .dropdown-item {
+    color: var(--vs-dblue);
+}
+
+.user-menu .dropdown-menu .dropdown-item:hover {
+    background-color: var(--vs-lblue);
+    color: var(--vs-white);
+}
+
 .btn:hover {
-    background-color: #ADC7D4;
-    color:#FFFFFF
-}
-
-#sidebar .nav-link {
-    color: inherit;
-}
-
-#sidebar .nav-link:hover,
-#sidebar .nav-link:focus {
-    color: #ADC7D4;
+    background-color: var(--vs-lblue);
+    color: var(--vs-white);
 }
 
 .page-link:hover {
-    color: #FFFFFF;
-    background-color: #ADC7D4;
-}
-
-/* ===================== */
-
-body {
-    overflow-x: hidden !important;
+    color: var(--vs-white);
+    background-color: var(--vs-lblue);
 }

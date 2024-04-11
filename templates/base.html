@@ -1,116 +1,133 @@
-<!DOCTYPE html>
 {% load static %}
+
+<!DOCTYPE html>
 <html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"
+				onerror=`this.onerror=null; this.href="{% static 'css/bootstrap/bootstrap.min.css' %}"`>
 
-<head>
-	<meta charset="utf-8">
-	
-	<!-- <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap.min.css' %}"> -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-	<!-- <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap-icons.min.css' %}"> -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-	<link rel="stylesheet" href="{% static 'css/base.css' %}">
-	{% block extra_head %}
-	{% endblock %}
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" 
+				onerror=`this.onerror=null; this.href="{% static 'css/bootstrap/bootstrap-icons.min.css' %}"`>
 
-</head>
+		<link rel="stylesheet" href="{% static 'css/base.css' %}">
+		
+		<!-- Fallback -->
+		<!-- <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap.min.css' %}"> -->
+		<!-- <link rel="stylesheet" href="{% static 'css/bootstrap/bootstrap-icons.min.css' %}"> -->
+		{% block extra_head %}
+		{% endblock %}
+		
+	</head>
 
-<body>
-	{% block body_block %}
-	{% endblock %}
-	
-	{% block main_container %}
-	<div class="row" style="height:100vh;">
-		{% block sidebar %}
-		<div class="col-2" style="width: 280px;">
-			<div id="sidebar" class="d-flex flex-column flex-shrink-0 p-4 fixed-top shadow" >
-				<a href="{% url 'index' %}" class="nav-link">
-					<div id="sidebar-logo-home" class="d-flex align-items-center">
-						<object data="{% static 'img/votesmart-logo-white.svg' %}" type="image/svg+xml" width="40px" height="40px" style=></object>
-						<span class="fw-bold ms-2">
-							Public Statements
-						</span>
-					</div>
+	<body>
 
-				</a>
-				<hr>
-				<ul class="nav flex-column mb-auto">
-					<li class="nav-item">
-						<a ref="{% url 'ps_harvester:harvester' %}" type="button" class="nav-link align-items-center" 
-						   data-bs-toggle="collapse" data-bs-target="#nav-sub-harvester">
-							<span class="fw-bold">Harvester</span>
-						</a>
-						<div id="nav-sub-harvester" class="collapse">
-							<ul class="nav flex-column">
-								<li class="nav-item">
-									<a href="{% url 'ps_harvester:harvester' %}" class="nav-link align-items-center">
-										<span>Status</span>
-									</a>
-								</li>
-								<li class="nav-item">
-									<a href="{% url 'ps_harvester:file_harvester' %}"
-										class="nav-link align-items-center">
-										<span>File Harvester</span>
-									</a>
-								</li>
-								<li class="nav-item">
-									<a href="{% url 'ps_harvester:web_harvester' %}"
-										class="nav-link align-items-center">
-										<span>Web Harvester</span>
-									</a>
-								</li>
-							</ul>
-						</div>
-					</li>
-				</ul>
-				<hr>
-				{% if user.is_authenticated %}
-				<div id="user-menu" class="dropdown">
-					<a type="button" class="nav-link text-decoration-none" data-bs-toggle="dropdown">
+		{% block new_body %}
+		{% endblock %}
+
+		{% block main_body %}
+		<div class="main-body">
+			<!--Sidebar-->
+			<div class="main-sidebar shadow">
+				<div class="sidebar-wrapper">
+					<div class="sidebar-header">
 						<div class="d-flex align-items-center">
-						{% if request.user.psuserprofile.profile_pic %}
-							<img>
-						{% else %}
-						<i class="bi bi-person-circle" style="font-size: 3rem;"></i>
-						{% endif %}
-						{% if request.user.psuserprofile.first_name and request.user.psuserprofile.first_name|length <= 25 %}
-							<strong class="ms-3">{{request.user.psuserprofile.first_name}}</strong>
-						{% else %}
-							<strong class="ms-3">@{{request.user.username}}</strong>
-						{% endif %}
+							<object data="{% static 'img/votesmart-logo-white.svg' %}" class="logo-home" type="image/svg+xml" width="50px" height="50px"></object>
+							<a href="{% url 'index' %}" class="nav-link ms-2">
+								<span class="fw-bold">Public Statements</span>
+							</a>
 						</div>
-					</a>
-					<ul class="dropdown-menu">
-						<li><a href="{% url 'ps_auth:logout' %}" class="dropdown-item">Sign out</a></li>
-					</ul>
+					</div>
+					<div class="sidebar-body">
+						<ul class="nav nav-pills">
+							<li class="nav-item">
+								<a class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#harvester-submenu">
+									<i class="bi bi-cloud-upload-fill me-2"></i>
+									<span>Harvester</span>
+								</a>
+							</li>
+							<div id="harvester-submenu" class="collapse">
+								<ul class="nav nav-pills">
+									<li class="nav-item"><a class="nav-link" href="{% url 'ps_harvester:harvester' %}">Processes</a></li>
+									<li class="nav-item"><a class="nav-link" href="{% url 'ps_harvester:file_harvest' %}">File Upload</a></li>
+								</ul>
+							</div>
+							<li class="nav-item">
+								<a class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#pipeline-submenu">
+									<i class="bi bi-diagram-3 me-2"></i>
+									<span>Pipeline</span>
+								</a>
+							</li>
+							<div id="pipeline-submenu" class="collapse">
+								<ul class="nav nav-pills">
+									<li class="nav-item"><a class="nav-link">Status</a></li>
+									<li class="nav-item"><a class="nav-link">Training</a></li>
+								</ul>
+							</div>
+							<li class="nav-item">
+								<a class="nav-link">
+									<i class="bi bi-person-rolodex me-2"></i>
+									<span>Users</span>
+								</a>
+							</li>
+						</ul>
+					</div>
+					<div class="sidebar-footer">
+						<div class="user-menu ms-2">
+							{% if user.is_authenticated %}
+							<div class="dropdown">
+								<a class="nav-link dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown">
+									{% if request.user.psuserprofile.profile_pic %}
+										<img>
+									{% else %}
+										<i class="bi bi-person-bounding-box"></i>
+									{% endif %}
+									
+									{% if request.user.psuserprofile and request.user.psuserprofile|length <= 15 %}
+										<strong class="ms-3">{{ request.user.psuserprofile }}</strong>
+									{% else %}
+										<strong class="ms-3">@{{ request.user.username|truncatechars:14 }}</strong>
+									{% endif %}
+								</a>
+								<ul class="dropdown-menu shadow">
+									<li><a class="dropdown-item" href="#" >My Profile</a></li>
+									<li><hr class="dropdown-divider"></li>
+									<li>
+										<a class="dropdown-item d-flex align-items-center" href="{% url 'ps_auth:logout' %}" >
+											<span class="me-2">Sign Out</span>
+											<i class="bi bi-box-arrow-left"></i>
+										</a>
+									</li>
+								</ul>
+							</div>
+							{% else %}
+							<a class="nav-link d-flex align-items-center justify-content-end me-3" href="{% url 'ps_auth:login' %}">
+								<strong class="fw-bold me-2">Sign In</strong>
+								<i class="bi bi-box-arrow-in-right"></i>
+							</a>
+							{% endif %}
+						</div>
+					</div>
 				</div>
-				{% else %}
-				<div class="mx-3">
-					<a class="nav-link" href="{% url 'ps_auth:login' %}">
-						<h5 class="fw-bold">Sign In</h5>
-					</a>
+			</div>
+			<!-- Main content -->
+			<div class="main-content">
+				<div class="content-wrapper">
+					{% block content_container %}
+					{% endblock %}
 				</div>
-
-				{% endif %}
 			</div>
 		</div>
 		{% endblock %}
 
-		<div class="col">
-			<div id="content-container" class="p-4">
-				{% block content_container %}
-				{% endblock %}
-			</div>
-		</div>
-	</div>
-	{% endblock %}
-
-	<script src="{% static 'js/bootstrap/bootstrap.bundle.min.js' %}"></script>
-	<script src="{% static 'js/jQuery/jquery-3.7.1.min.js' %}"></script>
-	<script src="{% static 'js/shared.js' %}"></script>
-	{% block extra_script %}
-	{% endblock %}
-	
-</body>
-
+		<!-- Base scripts -->
+		<script src="{% static 'js/bootstrap/bootstrap.bundle.min.js' %}"></script>
+		<script src="{% static 'js/jQuery/jquery-3.7.1.min.js' %}"></script>
+		<script src="{% static 'js/shared.js' %}"></script>
+		<!-- Scripts from children templates -->
+		{% block extra_script %}
+		{% endblock %}
+		
+	</body>
 </html>
