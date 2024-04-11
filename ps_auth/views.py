@@ -1,8 +1,13 @@
-from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib.auth import views as auth_views
+from django.template.loader import render_to_string
 
+from django.http import (
+    HttpResponse,
+    HttpResponseRedirect,
+    JsonResponse,
+)
 
 from ps_auth.forms import (
     PSAuthenticationForm,
@@ -17,7 +22,7 @@ class PSRegisterView(CreateView):
     template_name = "ps_auth/register.html"
     success_url = reverse_lazy("ps_auth:register")
 
-    def form_valid(self, form) -> HttpResponse:
+    def form_valid(self, form) -> HttpResponseRedirect:
         redirect_response = super().form_valid(form)
 
         if self.success_url == self.request.path:
@@ -28,12 +33,47 @@ class PSRegisterView(CreateView):
         else:
             return redirect_response
 
+    def form_invalid(self, form) -> HttpResponseRedirect | JsonResponse:
+        if self.request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            return JsonResponse(
+                {
+                    "field_errors": form.errors,
+                    "non_field_errors": form.non_field_errors(),
+                },
+                status=400,
+            )
+        else:
+            return super().form_invalid(form)
+
 
 class PSLoginView(auth_views.LoginView):
     form_class = PSAuthenticationForm
     template_name = "ps_auth/login.html"
     # Enable the following that will redirect the user to the login page if they haven't already login
-    # redirect_authenticated_user = True
+    redirect_authenticated_user = True
+
+    def form_valid(
+        self, form: auth_views.AuthenticationForm
+    ) -> HttpResponseRedirect | JsonResponse:
+        redirect_response = super().form_valid(form)
+
+        if redirect_response.status_code == 302 or redirect_response.status_code == 301:
+            return JsonResponse(
+                {"redirect": True, "redirect_url": redirect_response.url}
+            )
+        return redirect_response
+
+    def form_invalid(self, form) -> HttpResponseRedirect | JsonResponse:
+        if self.request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            return JsonResponse(
+                {
+                    "field_errors": form.errors,
+                    "non_field_errors": form.non_field_errors(),
+                },
+                status=400,
+            )
+        else:
+            return super().form_invalid(form)
 
 
 class PSLogoutView(auth_views.LogoutView):
@@ -46,15 +86,26 @@ class ForgotPasswordView(auth_views.PasswordResetView):
     template_name = "ps_auth/forgot_pass.html"
     success_url = reverse_lazy("ps_auth:forgotpassword")
 
-    def form_valid(self, form) -> HttpResponse:
-        # redirect_response = super().form_valid(form)
-        redirect_response = HttpResponseRedirect(self.get_success_url())
+    def form_valid(self, form) -> HttpResponseRedirect:
+        redirect_response = super().form_valid(form)
 
         if self.success_url == self.request.path:
             return self.render_to_response({})
 
         else:
             return redirect_response
+
+    def form_invalid(self, form) -> HttpResponseRedirect | JsonResponse:
+        if self.request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            return JsonResponse(
+                {
+                    "field_errors": form.errors,
+                    "non_field_errors": form.non_field_errors(),
+                },
+                status=400,
+            )
+        else:
+            return super().form_invalid(form)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

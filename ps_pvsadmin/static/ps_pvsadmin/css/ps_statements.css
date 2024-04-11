@@ -1,0 +1,6 @@
+#related-candidates-table th,
+#related-candidates-table td{
+    color: var(--vs-dblue);
+    background-color: inherit;
+    text-align: end;
+}

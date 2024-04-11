@@ -193,9 +193,9 @@ class FileHarvester(PermissionRequiredMixin, FormView):
         "ps_harvester.add_harvestprocess",
     ]
 
-    template_name = "ps_harvester/file_harvester.html"
+    template_name = "ps_harvester/file_harvest.html"
     form_class = HarvestFilesForm
-    success_url = reverse_lazy("ps_harvester:file_harvester")
+    success_url = reverse_lazy("ps_harvester:file_harvest")
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
@@ -211,6 +211,7 @@ class FileHarvester(PermissionRequiredMixin, FormView):
                 for speech_candidate_id, harvest in speech_candidate_to_harvest.items():
                     HarvestEntrySpeech.objects.create(
                         process=process,
+                        candidate_id=harvest["candidate_id"],
                         speech_candidate_id=speech_candidate_id,
                         review=harvest["review"],
                         review_message=harvest["review_message"],
@@ -233,7 +234,7 @@ class FileHarvester(PermissionRequiredMixin, FormView):
 
             return render(
                 request,
-                "ps_harvester/file_harvester.html",
+                "ps_harvester/file_harvest.html",
                 context={"form": HarvestFilesForm()} | returned_context,
             )
 

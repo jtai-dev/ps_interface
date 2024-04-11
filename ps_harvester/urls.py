@@ -15,7 +15,7 @@ urlpatterns = [
     path(
         "file",
         view=views.FileHarvester.as_view(),
-        name="file_harvester",
+        name="file_harvest",
     ),
     path(
         "web",

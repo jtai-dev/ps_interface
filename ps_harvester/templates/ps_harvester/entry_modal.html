@@ -18,7 +18,7 @@
 </div>
 
 <!-- Modal: Delete Entry -->
-<div class="delete-entry-confirmation modal fade" data-entry-id="{{ entry_id }}">
+<div class="delete-entry-modal modal fade" data-entry-id="{{ entry_id }}">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -35,7 +35,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="confirm-delete-entry btn bg-vs-red" data-entry-id="{{ entry_id }}" data-process-id="{{ process_id }}" data-url="{% url 'ps_harvester:delete_entry' pk=entry_id %}" data-bs-dismiss="modal">Yes</button>
+        <button type="button" class="confirm btn bg-vs-red" data-entry-id="{{ entry_id }}" data-process-id="{{ process_id }}" data-url="{% url 'ps_harvester:delete_entry' pk=entry_id %}" data-bs-dismiss="modal">Yes</button>
         <button type="button" class="btn bg-vs-dblue" data-bs-dismiss="modal">No</button>
       </div>
     </div>

@@ -1,28 +1,24 @@
 {% extends "base.html" %}
 {% load static %}
 
-
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'ps_auth/css/ps_auth.css' %}">
+<link rel="stylesheet" href="{% static 'ps_auth/css/auth_base.css' %}">
 {% endblock %}
 
-{% block sidebar %}
+{% block extra_script %}
+<script src="{% static 'ps_auth/js/auth_base.js' %}"></script>
 {% endblock %}
 
-{% block main_container %}
+{% block main_body %}
 {% endblock %}
 
-{% block body_block %}
-    <div id="auth-container" class="container py-5 ">
-        <div class="row d-flex py-5 justify-content-center h-100">
-            <div class="col-12 col-md-9 col-lg-7 col-xl-6">
-                <div class="card shadow bg-light" style="border-radius: 1rem;">
-                    <div class="card-body">
-                        {% block auth_card_content %}
-                        {% endblock %}
-                    </div>
-                </div>  
-            </div>
-        </div>
-    </div>
+{% block new_body %}
+<div class="d-flex justify-content-center" >
+	<div class="auth-card card shadow">
+		<div class="card-body">
+			{% block auth_card_content %}
+			{% endblock %}
+		</div>
+	</div>  
+</div>
 {% endblock %}

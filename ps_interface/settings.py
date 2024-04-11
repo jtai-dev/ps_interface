@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "ps_auth",
     "ps_users",
     "ps_harvester",
+    "ps_pvsadmin",
 ]
 
 MIDDLEWARE = [
@@ -65,6 +66,7 @@ TEMPLATES = [
             BASE_DIR / "ps_harvester/templates",
             BASE_DIR / "ps_users/templates",
             BASE_DIR / "ps_auth/templates",
+            BASE_DIR / "ps_pvsadmin/templates",
         ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -92,8 +94,18 @@ DATABASES = {
         "NAME": config("DB_NAME"),
         "USER": config("DB_USER"),
         "PASSWORD": config("DB_PASSWORD"),
-    }
+    },
+    "pvsadmin_db": {
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": config("VSDB_HOST"),
+        "PORT": config("VSDB_PORT"),
+        "NAME": config("VSDB_NAME"),
+        "USER": config("VSDB_USER"),
+        "PASSWORD": config("VSDB_PASSWORD"),
+    },
 }
+
+DATABASE_ROUTERS = ["ps_pvsadmin.routers.PVSAdminRouter"]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

@@ -16,7 +16,7 @@
 {% block content_container %}
 <h1>Harvest Status</h1>
 
-<div class="accordion accordion-flush mt-4" id="harvest-process-accordion">
+<div class="accordion mt-4" id="harvest-process-accordion">
 
     {% if processes_with_entries %}
     <div class="row p-2">
@@ -31,59 +31,51 @@
     {% endif %}
 
     {% for p in processes_with_entries %}
-    <div class="accordion-item row"> 
-
-        <div class="process accordion-header" 
-             style="cursor: pointer;"
-             data-process-id="{{ p.process_id }}">
-             
-            <div class="accordion-button collapsed text-vs-dblue"
-                 data-bs-toggle="collapse"
-                 data-bs-target=".harvest-entries[data-process-id='{{ p.process_id }}']">
-
-                <!-- Process IDs -->
-                <div class="col-2">
-                    <button class="process-id clean-btn vs-link text-vs-dblue" 
-                            data-process-id="{{ p.process_id }}"
-                            data-url="{% url 'ps_harvester:harvest_process_note' pk=p.process_id %}" 
-                            data-bs-toggle="modal" 
-                            data-bs-target=".process-notes[data-process-id='{{ p.process_id }}']"
-                            >{{p.process_id }}
-                    </button>
-                </div>
-
-                <!-- Total Entries -->
-                <div class="col-2">
-                    <button onclick="window.location.href=`{% url 'ps_harvester:harvest_process' pk=p.process_id %}`" 
-                            class="clean-btn vs-link text-vs-dblue"
-                    >{{ p.harvestentryspeech_set.all | length }}
-                    </button>
-                </div>
-
-                <!-- Created & Modified dates -->
-                <div class="col-3"><span>{{ p.created }}</span></div>
-                <div class="col-3"><span>{{ p.modified }}</span></div>
-
-                <!-- Statuses -->
-                <div class="process-status col-2 " data-process-id="{{ p.process_id }}" >
-                    {% if p.status.status_id == 1 %}
-                    <span class="complete-status">{{ p.status.status_name }}</span>
-                    {% elif p.status.status_id == 2 %}
-                    <span class="invalid-status">{{ p.status.status_name }}</span>
-                    {% elif p.status.status_id == 3 %}
-                    <span class="review-status">{{ p.status.status_name }}</span>
-                    {% elif p.status.status_id == 4 %}
-                    <a class="error-status" 
+    <div class="accordion-item card-accordion process" data-process-id="{{ p.process_id }}"> 
+        <div class="accordion-button collapsed text-vs-dblue"
+                data-bs-toggle="collapse"
+                data-bs-target=".harvest-entries[data-process-id='{{ p.process_id }}']">
+            <!-- Process IDs -->
+            <div class="col-2">
+                <button class="process-id link-btn" 
+                        data-process-id="{{ p.process_id }}"
+                        data-url="{% url 'ps_harvester:harvest_process_note' pk=p.process_id %}" 
                         data-bs-toggle="modal" 
-                        data-bs-target=".process-error[data-process-id='{{p.process_id}}']"
-                        >{{ p.status.status_name }}</a>
-                    {% endif %}
-                </div>
+                        data-bs-target=".process-notes[data-process-id='{{ p.process_id }}']"
+                        >{{p.process_id }}
+                </button>
             </div>
+
+            <!-- Total Entries -->
+            <div class="col-2">
+                <button onclick="window.location.href=`{% url 'ps_harvester:harvest_process' pk=p.process_id %}`" 
+                        class="link-btn"
+                >{{ p.harvestentryspeech_set.all | length }}
+                </button>
+            </div>
+
+            <!-- Created & Modified dates -->
+            <div class="col-3"><span>{{ p.created }}</span></div>
+            <div class="col-3"><span>{{ p.modified }}</span></div>
+
+            <!-- Statuses -->
+            <div class="process-status col-2 " data-process-id="{{ p.process_id }}" >
+                {% if p.status.status_id == 1 %}
+                <span class="complete-status">{{ p.status.status_name }}</span>
+                {% elif p.status.status_id == 2 %}
+                <span class="invalid-status">{{ p.status.status_name }}</span>
+                {% elif p.status.status_id == 3 %}
+                <span class="review-status">{{ p.status.status_name }}</span>
+                {% elif p.status.status_id == 4 %}
+                <a class="error-status" 
+                    data-bs-toggle="modal" 
+                    data-bs-target=".process-error[data-process-id='{{p.process_id}}']"
+                    >{{ p.status.status_name }}</a>
+                {% endif %}
+            </div>
+        </div>
             
             {% include "ps_harvester/process_modal.html" with process=p %}
-
-        </div>
             
         <div class="harvest-entries accordion-collapse collapse" 
              data-process-id="{{ p.process_id }}" 
@@ -100,7 +92,7 @@
                     
                     <!-- Foreign ID that is being referenced -->
                     <div class="col-2">
-                        <button class="speech-entry-id clean-btn vs-link text-vs-dblue"
+                        <button class="speech-entry-id link-btn"
                                 data-entry-id="{{ e.entry_id }}"
                                 data-bs-toggle="modal" 
                                 data-bs-target=".speech-entry-notes[data-entry-id='{{ e.entry_id }}']"
@@ -110,44 +102,35 @@
 
                     <!-- Message to be reviewed -->
                     <div class="col-xl-8 col-lg-7 col-md-5 col-sm-4 col-xs-2">
-                        <a class="vs-link" href="{{ e.admin_url }}" target="_blank">{{ e.review_message }}</a>
+                        <a class="link-btn" href="{% url 'ps_pvsadmin:speech_by_candidate' speech_candidate_id=e.speech_candidate_id candidate_id=e.candidate_id %}" target="_blank">{{ e.review_message }}</a>
                     </div>
                     
                     <!-- Resolve Button -->
-                    <div class="col-1">
-                        <button class="resolve-entry btn bg-vs-dblue" 
-                                data-entry-id="{{ e.entry_id }}"
-                                >Resolve</button>
+                    <div class="col-1 resolve-entry d-flex">
+                        <button class="btn bg-vs-dblue">Resolve</button>
 
-                        <div class="resolve-btns d-flex">
-
-                            <button class="confirm-resolve-entry clean-btn text-vs-dblue me-2"
-                                    data-entry-id="{{ e.entry_id }}" 
-                                    data-process-id="{{ p.process_id }}"
-                                    data-url="{% url 'ps_harvester:resolve_entry' pk=e.entry_id %}">
-                                <i class="bi bi-check-circle"></i>
-                            </button>
-
-                            <button class="cancel-resolve-entry clean-btn text-vs-red ms-3" 
-                                    data-entry-id="{{ e.entry_id }}">
-                                <i class="bi bi-x-circle"></i>
-                            </button>
-                        </div>
-
+                        <i class="confirm icon-btn bi bi-check-circle me-2"
+                            data-entry-id="{{ e.entry_id }}" 
+                            data-process-id="{{ p.process_id }}"
+                            data-url="{% url 'ps_harvester:resolve_entry' pk=e.entry_id %}">
+                        </i>
+                        
+                        <i class="cancel icon-btn bi-x-circle ms-3 text-vs-red" 
+                            data-entry-id="{{ e.entry_id }}">
+                        </i>
                     </div>
 
                     <!-- Delete Button -->
-                    <div class="col-1" style="align-items: end;">
-                        <button class="delete-entry btn bg-vs-red" 
+                    <div class="col-1 delete-entry" style="align-items: end;">
+                        <button class="btn bg-vs-red" 
                                 data-bs-toggle="modal" 
-                                data-bs-target=".delete-entry-confirmation[data-entry-id='{{ e.entry_id }}']"
+                                data-bs-target=".delete-entry-modal[data-entry-id='{{ e.entry_id }}']"
                                 >Delete
                         </button>
                     </div>
 
                     <!-- Modal: Entry Notes & Delete Confirmation -->
                     {% include "ps_harvester/entry_modal.html" with entry_id=e.entry_id process_id=p.process_id %}
-
                 </div>
                 {% endfor %}
             </div>

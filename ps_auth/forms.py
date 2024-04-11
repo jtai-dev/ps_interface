@@ -25,7 +25,7 @@ class PSUserCreationForm(auth_forms.UserCreationForm):
             self.add_error(
                 "email",
                 ValidationError(
-                    "Email is not verified. Please contact your supervisor.",
+                    "Email is not verified. Please contact the administrator or your supervisor.",
                     code="unverified_email",
                 ),
             )
@@ -43,7 +43,7 @@ class PSAuthenticationForm(auth_forms.AuthenticationForm):
     username = forms.CharField(
         max_length=255,
         widget=forms.TextInput(attrs={"autofocus": True}),
-        label="Username or Email",
+        label="Email or Username",
     )
 
     def clean(self):

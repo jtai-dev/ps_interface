@@ -74,6 +74,7 @@ class HarvestEntrySpeech(models.Model):
 
     # Identifier for each statements entry on VoteSmart's Admin
     speech_candidate_id = models.BigIntegerField(editable=False)
+    candidate_id = models.BigIntegerField(default=-1, editable=False)
     process = models.ForeignKey(
         HarvestProcess, on_delete=models.CASCADE, editable=False
     )
@@ -93,7 +94,3 @@ class HarvestEntrySpeech(models.Model):
     def unresolve(self):
         self.review = True
         self.save()
-
-    @property
-    def admin_url(self):
-        return f"https://admin.votesmart.org/loadCandidateSpeechDetail.do?candidateSpeechId={self.speech_candidate_id}"
