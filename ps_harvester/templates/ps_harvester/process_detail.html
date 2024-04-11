@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
 
-
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'ps_harvester/css/process_detail.css' %}">
 <link rel="stylesheet" href="{% static 'ps_harvester/css/modal.css' %}">
@@ -19,11 +18,11 @@
         <button class="btn bg-vs-dblue me-3" onclick="window.location.href=`{% url 'ps_harvester:harvester' %}`"
             ><i class="bi bi-arrow-left"></i> Back</button>
         <button 
-           class="process-id clean-btn text-vs-dblue"
+           class="link-btn process-id"
            data-process-id="{{ harvestprocess.pk }}"
            data-bs-toggle="modal"
            data-bs-target=".process-notes">
-            <h2>Harvest Process ({{ harvestprocess.pk }})</h2>
+            <h2>Harvest Process - ID: {{ harvestprocess.pk }}</h2>
         </button>
     </div>
     <div class="col d-flex justify-content-end">
@@ -88,7 +87,7 @@
          data-entry-id="{{ e.entry_id }}">
 
         <div class="col-2">
-            <button class="speech-entry-id clean-btn vs-link"
+            <button class="speech-entry-id link-btn"
                     data-entry-id="{{ e.entry_id }}"
                     data-bs-toggle="modal" 
                     data-bs-target=".speech-entry-notes[data-entry-id='{{ e.entry_id }}']"        
@@ -96,7 +95,7 @@
         </div>
 
         <div class="col-5">
-            <a class="vs-link" href="{% url 'ps_pvsadmin:speech_by_candidate' speech_candidate_id=e.speech_candidate_id candidate_id=e.candidate_id %}" target="_blank">{{ e.review_message | default_if_none:"Nothing to review."}}</a>
+            <a class="link-btn" href="{% url 'ps_pvsadmin:speech_by_candidate' speech_candidate_id=e.speech_candidate_id candidate_id=e.candidate_id %}" target="_blank">{{ e.review_message | default_if_none:"Nothing to review."}}</a>
         </div>
 
         <div class="col-2">{{ e.modified }}</div>
@@ -107,19 +106,15 @@
                     data-entry-id="{{ e.entry_id }}"
                     >Unresolve</button>
                     
-            <div class="resolve-btns d-flex">
+            <div class="unresolve-btns d-flex">
+                <i class="confirm-unresolve-entry bi bi-check-circle icon-btn me-3"
+                    data-entry-id="{{ e.entry_id }}" 
+                    data-url="{% url 'ps_harvester:unresolve_entry' pk=e.entry_id %}">
+                </i>
 
-                <button class="confirm-unresolve-entry clean-btn text-vs-dblue me-3"
-                        data-entry-id="{{ e.entry_id }}" 
-                        data-url="{% url 'ps_harvester:unresolve_entry' pk=e.entry_id %}">
-                    <i class="bi bi-check-circle"></i>
-                </button>
-
-                <button class="cancel-unresolve-entry clean-btn text-vs-red ms-3" 
-                        data-entry-id="{{ e.entry_id }}">
-                    <i class="bi bi-x-circle"></i>
-                </button>
-                
+                <i class="cancel-unresolve-entry bi bi-x-circle icon-btn text-vs-red ms-3" 
+                    data-entry-id="{{ e.entry_id }}">
+                </i>
             </div>
         </div>
 
@@ -130,9 +125,7 @@
                     >Delete
             </button>
         </div>
-        
         {% include "ps_harvester/entry_modal.html" with entry_id=e.entry_id process_id=harvestprocess.pk %}
-        
     </div>
     
 {% endfor %}

@@ -50,14 +50,13 @@ $(document).ready(function () {
         });
     }
 
-    $(".resolve-entry").click(function () {
-        var entryId = $(this).data("entry-id");
-        $(`.confirm-resolve-entry[data-entry-id=${entryId}]`).css("display", "inline");
-        $(`.cancel-resolve-entry[data-entry-id=${entryId}]`).css("display", "inline");
+    $(".resolve-entry > button").click(function () {
+        var parent = $(this).parent(".resolve-entry")
+        $(parent).find(".icon-btn").css("display", "inline");
         $(this).css("display", "none");
     });
 
-    $(".confirm-resolve-entry").click(function (e) {
+    $(".resolve-entry .confirm").click(function (e) {
         e.preventDefault();
         const url = $(this).data("url");
         const processID = $(this).data("process-id");
@@ -65,14 +64,13 @@ $(document).ready(function () {
         updateEntry(url, processID, entryID)
     });
 
-    $(".cancel-resolve-entry").click(function () {
-        var entryId = $(this).data("entry-id");
-        $(this).css("display", "none");
-        $(`.confirm-resolve-entry[data-entry-id=${entryId}]`).css("display", "none");
-        $(`.resolve-entry[data-entry-id=${entryId}]`).css("display", "inline");
+    $(".resolve-entry .cancel").click(function () {
+        var parent = $(this).parents(".resolve-entry")
+        $(parent).find(".icon-btn").css("display", "none")
+        $(parent).find("button").css("display", "inline")
     });
 
-    $(".confirm-delete-entry").click(function (e) {
+    $(".delete-entry-modal .confirm").click(function (e) {
         e.preventDefault();
         const url = $(this).data("url");
         const processID = $(this).data("process-id");
@@ -80,12 +78,5 @@ $(document).ready(function () {
 
         updateEntry(url, processID, entryID)
     });
-
-    // $('.error-status').on('click', function (e) {
-    //     const accordionTarget = $(this).closest('.accordion-button').data('bs-target');
-    //     setTimeout(function(){
-    //         $(accordionTarget).collapse('hide')
-    //     }, 400)
-    // });
 
 });

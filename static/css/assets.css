@@ -1,0 +1,98 @@
+:root {
+    --vs-dblue: #333366;
+    --vs-lblue: #ADC7D4;
+    --vs-red: #EE3E37;
+    --vs-white: #FFFFFF;
+    --vs-bg-white: #f5f5fa;
+    --vs-gradient: linear-gradient(-220deg, #333366, #EE3E37, #ADC7D4);
+    --vs-bg-animation: subtle-gradient 10s ease infinite;
+}
+
+.text-vs-lblue {
+    color: var(--vs-lblue);
+}
+
+.text-vs-dblue {
+    color: var(--vs-dblue);
+}
+
+.text-vs-red {
+    color: var(--vs-red);
+}
+
+.text-vs-white {
+    color: var(--vs-white);
+}
+
+.bg-vs-red {
+    background-color: var(--vs-red);
+    color: var(--vs-white);
+}
+
+.bg-vs-lblue {
+    background-color: var(--vs-lblue);
+    color: var(--vs-white);
+}
+
+.bg-vs-dblue {
+    background-color: var(--vs-dblue);
+    color: var(--vs-white);
+}
+
+.bg-vs-white {
+    color: var(--vs-dblue);
+    background-color: var(--vs-white);
+}
+
+.link-btn {
+    background: none;
+    border: none;
+    padding: 0%;
+    text-decoration: underline;
+    color: var(--vs-dblue);
+}
+
+.icon-btn{
+    font-size: 2.0rem;
+}
+
+.link-btn:hover,
+.icon-btn:hover{
+    color: var(--vs-lblue);
+    cursor: pointer;
+}
+
+.card-accordion {
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.05);
+    border-radius: 0.75rem;
+    background-color: var(--vs-white);
+    border-color: var(--vs-white);
+}
+
+.card-accordion>.accordion-button.collapsed {
+    background-color: var(--vs-white);
+    box-shadow: none;
+}
+
+.card-accordion>.accordion-button:not(.collapsed) {
+    background-color: var(--vs-white);
+    box-shadow: none;
+}
+
+.accordion-item{
+    border-radius: 0.75rem;
+}
+
+@keyframes subtle-gradient {
+    0% {
+        background-position: 0% 20%;
+    }
+
+    50% {
+        background-position: 20% 0%;
+    }
+
+    100% {
+        background-position: 0% 20%;
+    }
+}

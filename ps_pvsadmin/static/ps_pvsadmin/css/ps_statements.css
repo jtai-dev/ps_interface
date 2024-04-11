@@ -1,24 +1,6 @@
-.card-accordion {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 0.5rem;
-    background-color: #f5f5f7;
-    border-color: #f5f5f7;
-}
-
-.card-accordion>.accordion-button.collapsed {
-    background-color: #f5f5f7;
-    box-shadow: none;
-}
-
-.card-accordion>.accordion-button:not(.collapsed) {
-    background-color: #f5f5f7;
-    box-shadow: none;
-}
-
-
 #related-candidates-table th,
 #related-candidates-table td{
-    color: #333366;
+    color: var(--vs-dblue);
     background-color: inherit;
     text-align: end;
 }
