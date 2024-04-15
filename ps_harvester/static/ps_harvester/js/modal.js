@@ -18,77 +18,80 @@ $(document).ready(function () {
 
     const csrftoken = getCookie('csrftoken');
 
-    function getNotes(textArea){
+    function getNotes(textArea) {
         $.ajax({
             url: textArea.data('url'),
             type: "GET",
-            success: function(data){
+            success: function (data) {
                 textArea.val(data.notes)
             }
         })
     }
 
-    function updateNotes(textArea){
+    function updateNotes(textArea) {
         const modalBody = textArea.parents('.modal-body')
         $.ajax({
             url: textArea.data('url'),
             type: "POST",
-            data: {notes: textArea.val()},
+            data: { notes: textArea.val() },
             headers: {
                 'X-CSRFToken': csrftoken,
             },
-            success: function(response){
+            success: function (response) {
                 console.log(response.msg)
             },
-            error: function(response){
+            error: function (response) {
                 modalBody.append(`<div class='ms-1 text-vs-red'><span>Error saving: ${response.msg}</span></div>`);
             }
         })
     }
 
-    $('.process-id').on('click', function(e){
-        const processNotes = $(`.process-notes[data-process-id=${$(this).data("process-id")}]`)
-        const textArea = processNotes.find(".modal-body textarea")
+    $('.process-id button').on('click', function (e) {
+        processID = $(this).parents('.process-row').data("process-id")
+        processNotes = $(`.process-notes[data-process-id='${processID}']`)
+        console.log(processID)
+        textArea = processNotes.find(".modal-body textarea")
         getNotes(textArea)
     })
 
-    $('.process-notes .edit-btn').on('click', function(e){
-        const textArea = $(this).parents('.process-notes').find('.modal-body textarea');
+    $('.process-notes .edit-btn').on('click', function (e) {
+        textArea = $(this).parents('.process-notes').find('.modal-body textarea');
 
-        $(this).text(function(i, text){
+        $(this).text(function (i, text) {
             return text === "Edit" ? "Save" : "Edit"
         })
 
-        if ($(this).text() === 'Save'){
-            textArea.removeAttr('disabled');   
+        if ($(this).text() === 'Save') {
+            textArea.removeAttr('disabled');
         }
-        else{
+        else {
             updateNotes(textArea)
             textArea.prop('disabled', true);
         }
     });
 
-    $('.speech-entry-id').on('click', function(e){
-        const entryNotes = $(`.speech-entry-notes[data-entry-id=${$(this).data("entry-id")}]`)
-        const textArea = entryNotes.find(".modal-body textarea")
+    $('.entry-id button').on('click', function (e) {
+        entryID = $(this).parents('.entry-row').data("entry-id")
+        entryNotes = $(`.entry-notes[data-entry-id='${entryID}']`)
+        textArea = entryNotes.find(".modal-body textarea")
         getNotes(textArea)
     })
 
 
-    $('.speech-entry-notes .edit-btn').on('click', function(e){
-        const textArea = $(this).parents('.speech-entry-notes').find('.modal-body textarea')
-        
-        $(this).text(function(i, text){
+    $('.entry-notes .edit-btn').on('click', function (e) {
+        textArea = $(this).parents('.entry-notes').find('.modal-body textarea')
+
+        $(this).text(function (i, text) {
             return text === "Edit" ? "Save" : "Edit"
         })
 
-        if ($(this).text() === 'Save'){
+        if ($(this).text() === 'Save') {
             textArea.removeAttr('disabled');
         }
-        else{
+        else {
             updateNotes(textArea)
             textArea.prop('disabled', true);
         }
     })
-    
+
 });
