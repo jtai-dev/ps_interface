@@ -1,15 +1,17 @@
-.confirm-unresolve-entry, 
-.cancel-unresolve-entry {
-    font-size: 2.0rem;
+.unresolve-entry .icon-btn {
     display: none;
 }
 
-.confirm-unresolve-entry:hover,
-.cancel-unresolve-entry:hover {
-    color: #ADC7D4;
-    cursor: pointer;
+.unresolve-entry .confirm{
+    color:#20c997;
 }
 
-.harvest-entry{
-    border-bottom: 1px solid #dddddd;
+.entry-container table{
+    vertical-align: middle;
+}
+
+.entry-container table td,
+.entry-container table th{
+    background-color: inherit;
+    color: inherit !important;
 }

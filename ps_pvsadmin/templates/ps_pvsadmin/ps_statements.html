@@ -12,200 +12,206 @@
 
 {% block content_container %}
 <div class="mt-2">
-    <div class="row mb-4">
-        <div class="col-xs-12 col-sm-6 mb-3">
-          <h1>Test Admin - Public Statements</h1>
-          <h5>Candidate - ID: {{ candidate_id }} [{{ candidate_name }}]</h5>
-        </div>
+	<div class="row mb-4">
+		<div class="col-xs-12 col-sm-6 mb-3">
+			<h1>Test Admin - Public Statements</h1>
+			<h5>Candidate - ID: {{ candidate_id }} [{{ candidate_name }}]</h5>
+		</div>
 
-        <div class="col-xs-12 col-sm-6 mb-3">
-          <div class="d-flex justify-content-end">
-            <div id="status-banner-success" hidden class="alert alert-success"></div>
-            <div id="status-banner-failed" hidden class="alert alert-danger"></div>
-          </div>
-        </div>
-    </div>
+		<div class="col-xs-12 col-sm-6 mb-3">
+			<div class="d-flex justify-content-end">
+				<div id="status-banner-success" hidden class="alert alert-success"></div>
+				<div id="status-banner-failed" hidden class="alert alert-danger"></div>
+			</div>
+		</div>
+	</div>
 
-    <form id="speech-form" method="post" data-url="{% url 'ps_pvsadmin:speech_update' speech_id=speech.speech_id %}">
-      {% csrf_token %}
-      <div class="row mt-3">
-          <div class="col-xs-12 col-sm-6 mb-3">
-              <div class="form-group">
-                <label for="speechId">Speech ID</label>
-                <input type="text" disabled class="form-control" id="speechId" value="{{ speech.speech_id }}">
-              </div>
-          </div>
+	<form id="speech-form" method="post" data-url="{% url 'ps_pvsadmin:speech_update' speech_id=speech.speech_id %}">
+		{% csrf_token %}
+		<div class="row mt-3">
+			<div class="col-xs-12 col-sm-6 mb-3">
+				<div class="form-group">
+					<label for="speechId">Speech ID</label>
+					<input type="text" disabled class="form-control" id="speechId" value="{{ speech.speech_id }}">
+				</div>
+			</div>
 
-          <div class="col-xs-12 col-sm-6 mb-3">
-              <div class="form-group">
-                <label for="date">Date</label>
-                <input type="date" name="{{ speech_form.speechdate.name }}" class="form-control" id="date" value="{{ speech.speechdate|date:'Y-m-d' }}">
-              </div>
-          </div>
+			<div class="col-xs-12 col-sm-6 mb-3">
+				<div class="form-group">
+					<label for="date">Date</label>
+					<input type="date" name="{{ speech_form.speechdate.name }}" class="form-control" id="date"
+						value="{{ speech.speechdate|date:'Y-m-d' }}">
+				</div>
+			</div>
 
-          <div class="col-xs-12 col-sm-6 mb-3">
-            <div class="form-group">
-              <label for="type">Type *</label>
-              <select name="{{ speech_form.speechtype.name }}" class="form-select" id="type">
-                    {% for st in speechtypes %}
-                        {% if st == speech.speechtype %}
-                            <option selected value="{{ st.speechtype_id }}">{{ st.name }}</option>
-                        {% else %}
-                            <option value="{{ st.speechtype_id }}">{{ st.name }}</option>
-                        {% endif %}
-                    {% endfor %}
-              </select>
-            </div>
-          </div>
+			<div class="col-xs-12 col-sm-6 mb-3">
+				<div class="form-group">
+					<label for="type">Type *</label>
+					<select name="{{ speech_form.speechtype.name }}" class="form-select" id="type">
+						{% for st in speechtypes %}
+						{% if st == speech.speechtype %}
+						<option selected value="{{ st.speechtype_id }}">{{ st.name }}</option>
+						{% else %}
+						<option value="{{ st.speechtype_id }}">{{ st.name }}</option>
+						{% endif %}
+						{% endfor %}
+					</select>
+				</div>
+			</div>
 
-          <div class="col-xs-12 col-sm-6 mb-3">
-            <div class="form-group">
-              <label for="location">Location</label>
-              <input type="text" name="{{ speech_form.location.name }}" class="form-control" id="location" value="{{ speech.location }}">
-            </div>
-          </div>
+			<div class="col-xs-12 col-sm-6 mb-3">
+				<div class="form-group">
+					<label for="location">Location</label>
+					<input type="text" name="{{ speech_form.location.name }}" class="form-control" id="location"
+						value="{{ speech.location }}">
+				</div>
+			</div>
 
-          <div class="col-xs-12 col-sm-6 mb-3">
-            <div class="form-group">
-              <label for="url">URL</label>
-              <input type="text" name="{{ speech_form.url.name }}" class="form-control" id="url" value="{{ speech.url }}">
-            </div>
-          </div>
+			<div class="col-xs-12 col-sm-6 mb-3">
+				<div class="form-group">
+					<label for="url">URL</label>
+					<input type="text" name="{{ speech_form.url.name }}" class="form-control" id="url"
+						value="{{ speech.url }}">
+				</div>
+			</div>
 
-          <div class="col-xs-12 col-sm-6 mb-3">
-            <div class="form-group">
-              <label for="title">Title *</label>
-              <input type="text" name="{{ speech_form.title.name }}" class="form-control" id="title" value="{{ speech.title }}">
-            </div>
-          </div>
+			<div class="col-xs-12 col-sm-6 mb-3">
+				<div class="form-group">
+					<label for="title">Title *</label>
+					<input type="text" name="{{ speech_form.title.name }}" class="form-control" id="title"
+						value="{{ speech.title }}">
+				</div>
+			</div>
 
-          <div class="col-12 mb-3">
-            <div class="form-group">
-              <label for="speechText">Speech Text *</label>
-              <textarea class="form-control" name="{{ speech_form.speechtext.name }}" id="speechText" rows="5" style="height: 300px;" >{{ speech.speechtext }}</textarea>
-            </div>
-          </div>
-      </div>
+			<div class="col-12 mb-3">
+				<div class="form-group">
+					<label for="speechText">Speech Text *</label>
+					<textarea class="form-control" name="{{ speech_form.speechtext.name }}" id="speechText" rows="5"
+						style="height: 300px;">{{ speech.speechtext }}</textarea>
+				</div>
+			</div>
+		</div>
 
-      <div class="row mt-3">
-          <div class="col-xs-12 col-sm-6 mb-3">
-              <div class="form-group">
-                <label for="categoriesInput">Categories</label>
-                <input type="text" class="form-control" id="categories-input">
-              </div>
-          </div>
+		<div class="row mt-3">
+			<div class="col-xs-12 col-sm-6 mb-3">
+				<div class="form-group">
+					<label for="categoriesInput">Categories</label>
+					<input type="text" class="form-control" id="categories-input">
+				</div>
+			</div>
 
-          <div class="col-xs-12 col-sm-6 mb-3">
-              <div class="form-group">
-                <label for="tagsInput">Tags</label>
-                <input type="text" class="form-control" id="tags-input">
-              </div>
-          </div>
-      </div>
+			<div class="col-xs-12 col-sm-6 mb-3">
+				<div class="form-group">
+					<label for="tagsInput">Tags</label>
+					<input type="text" class="form-control" id="tags-input">
+				</div>
+			</div>
+		</div>
 
-      <div class="row mt-3">
-          <div class="col mb-3 d-flex justify-content-end">
-              <button id="save-speech" type="submit" class="btn bg-vs-dblue me-2">Save</button>
-              <button id="delete-speech" 
-                      type="button"
-                      class="btn bg-vs-red me-2"
-                      data-bs-toggle="modal"
-                      data-bs-target="#delete-speech-confirmation">Delete</button>
-              {% if related %}
-                <button id="delete-speech-candidate"
-                        type="button"
-                        class="btn bg-vs-red"
-                        data-bs-toggle="modal"
-                        data-bs-target="#delete-speech-candidate-confirmation">Delete for this candidate</button>
-              {% endif %}
-          </div>
-      </div>
-    </form>
+		<div class="row mt-3">
+			<div class="col mb-3 d-flex justify-content-end">
+				<button id="save-speech" type="submit" class="btn bg-vs-dblue me-2">Save</button>
+				<button id="delete-speech" type="button" class="btn bg-vs-red me-2" data-bs-toggle="modal"
+					data-bs-target="#delete-speech-confirmation">Delete</button>
+				{% if related %}
+				<button id="delete-speech-candidate" type="button" class="btn bg-vs-red" data-bs-toggle="modal"
+					data-bs-target="#delete-speech-candidate-confirmation">Delete for this candidate</button>
+				{% endif %}
+			</div>
+		</div>
+	</form>
 
-    <!-- Modal: Delete Speech -->
-    <div id="delete-speech-confirmation" class="modal fade">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5 text-vs-dblue">Delete Confirmation</h1>
-            <button class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <form method="post" action="{% url 'ps_pvsadmin:speech_delete' speech_id=speech.speech_id %}">
-            {% csrf_token %}
-            <div class="modal-body">
-              <span>Are you sure you want to delete Speech ID: {{ speech.speech_id }}?</span>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn bg-vs-red" data-bs-dismiss="modal">Yes</button>
-              <button type="button" class="btn bg-vs-dblue" data-bs-dismiss="modal">No</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+	<!-- Modal: Delete Speech -->
+	<div id="delete-speech-confirmation" class="modal fade">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5 text-vs-dblue">Delete Confirmation</h1>
+					<button class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<form method="post" action="{% url 'ps_pvsadmin:speech_delete' speech_id=speech.speech_id %}">
+					{% csrf_token %}
+					<div class="modal-body">
+						<span>Are you sure you want to delete Speech ID: {{ speech.speech_id }}?</span>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn bg-vs-red" data-bs-dismiss="modal">Yes</button>
+						<button type="button" class="btn bg-vs-dblue" data-bs-dismiss="modal">No</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 
-    {% if related %}
-    <!-- Modal: Delete Speech Canddiate -->
-    <div id="delete-speech-candidate-confirmation" class="modal fade">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5 text-vs-dblue">Delete Confirmation</h1>
-            <button class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <form method="post" action="{% url 'ps_pvsadmin:speech_candidate_delete' speech_candidate_id=speech_candidate.speech_candidate_id %}">
-            {% csrf_token %}
-            <div class="modal-body">
-              <span>Are you sure you want to delete the association of Speech ID: {{ speech.speech_id }} with Candidate ID: {{ candidate_id }}?</span>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn bg-vs-red" data-bs-dismiss="modal">Yes</button>
-              <button type="button" class="btn bg-vs-dblue" data-bs-dismiss="modal">No</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-    {% endif %}
+	{% if related %}
+	<!-- Modal: Delete Speech Canddiate -->
+	<div id="delete-speech-candidate-confirmation" class="modal fade">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5 text-vs-dblue">Delete Confirmation</h1>
+					<button class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<form method="post"
+					action="{% url 'ps_pvsadmin:speech_candidate_delete' speech_candidate_id=speech_candidate.speech_candidate_id %}">
+					{% csrf_token %}
+					<div class="modal-body">
+						<span>Are you sure you want to delete the association of Speech ID: {{ speech.speech_id }} with
+							Candidate ID: {{ candidate_id }}?</span>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn bg-vs-red" data-bs-dismiss="modal">Yes</button>
+						<button type="button" class="btn bg-vs-dblue" data-bs-dismiss="modal">No</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	{% endif %}
 
 </div>
 
 <div class="mt-2">
-  <div class="accordion" id="related-candidate-section">
-    <div class="accordion-item card-accordion mt-3">
-        <button class="accordion-button collapsed text-vs-dblue" type="button" data-bs-toggle="collapse" data-bs-target="#related-candidates">
-          <h5>Related Candidates ({{ related | length}})</h5>
-        </button>
-        <div class="accordion-collapse collapse" id="related-candidates" data-bs-parent="related-candidate-section">
-          <div class="accordion-body">
-            {% if related %}
-            <table id="related-candidates-table" class="table table-borderless">
-              <thead>
-                <th width="15%">Speech Candidate ID</th>
-                <th width="25%">Candidate ID</th>
-                <th width="25%">Candidate Name</th>
-                <th width="25%"></th>
-              </thead>
-              <tbody>
-                {% for sc in related %}
-                  <tr>
-                    <td>{{ sc.speech_candidate_id }}</td>
-                    <td>{{ sc.candidate_id }}</td>
-                    <td>{{ sc.candidate.firstname }} {{ sc.candidate.middlename }} {{ sc.candidate.lastname }} </td>
-                    <td>
-                      <a class="btn bg-vs-dblue" href="{% url 'ps_pvsadmin:speech_by_candidate' speech_candidate_id=sc.speech_candidate_id candidate_id=sc.candidate_id%}">View</a>
-                      <!-- <button class="btn bg-vs-red">Remove</button> -->
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-            {% endif %}
-          </div>
-        </div>
-    </div>
-  </div>
+	<div class="accordion" id="related-candidate-section">
+		<div class="accordion-item mt-3">
+			<div class="accordion-header">
+				<button class="accordion-button collapsed text-vs-dblue" type="button" data-bs-toggle="collapse"
+						data-bs-target="#related-candidates">
+					<h5>Related Candidates ({{ related | length}})</h5>
+				</button>
+			</div>
+			
+			<div class="accordion-collapse collapse" id="related-candidates" data-bs-parent="related-candidate-section">
+				<div class="accordion-body">
+					{% if related %}
+					<table id="related-candidates-table" class="table table-borderless">
+						<thead>
+							<th width="15%">Speech Candidate ID</th>
+							<th width="25%">Candidate ID</th>
+							<th width="25%">Candidate Name</th>
+							<th width="25%"></th>
+						</thead>
+						<tbody>
+							{% for sc in related %}
+							<tr>
+								<td>{{ sc.speech_candidate_id }}</td>
+								<td>{{ sc.candidate_id }}</td>
+								<td>{{ sc.candidate.firstname }} {{ sc.candidate.middlename }} {{ sc.candidate.lastname
+									}} </td>
+								<td>
+									<a class="btn bg-vs-dblue"
+										href="{% url 'ps_pvsadmin:speech_by_candidate' speech_candidate_id=sc.speech_candidate_id candidate_id=sc.candidate_id%}">View</a>
+									<!-- <button class="btn bg-vs-red">Remove</button> -->
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 {% endblock %}
-
