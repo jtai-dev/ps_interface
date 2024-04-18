@@ -18,6 +18,12 @@
     <h1>Harvest Processes</h1>
 </div>
 
+{% if processes_with_entries.count == 0%}
+<div class="mt-4 fst-italic">
+    <h4>No harvest process yet.</h4>
+</div>
+{% endif %}
+
 <div class="accordion" id="harvest-process-accordion">
 
     {% for p in processes_with_entries %}
@@ -56,7 +62,7 @@
                 </div>
             </div>
 
-            {% include "ps_harvester/process_modal.html" with process=p %}
+            {% include "ps_harvester/process-modal.html" with process=p %}
             
             <div class="accordion-collapse collapse"
                  data-process-id="{{ p.process_id }}"
@@ -106,7 +112,7 @@
                                             </button>
                                         </div>
                                     </td>
-                                {% include "ps_harvester/entry_modal.html" with entry_id=e.entry_id process_id=p.process_id %}
+                                {% include "ps_harvester/entry-modal.html" with entry_id=e.entry_id process_id=p.process_id %}
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -125,11 +131,7 @@
                         </a>
                         {% else %}
                         <a class="link-btn" href="{% url 'ps_harvester:harvest_process' pk=p.process_id %}">
-                            {% if p.harvestentryspeech_set.count < 2 %}
-                                <span>See all entries</span>
-                            {% else %}
-                                <span>See all {{ p.harvestentryspeech_set.all | length }} entries</span>
-                            {% endif %}
+                            <span>See {{ p.harvestentryspeech_set.all | length }} resolved entries</span>
                         </a>
                         {% endif %}
                     </div>
@@ -142,7 +144,7 @@
 </div>
 
 
-{% if processes_with_entries %}
+{% if page_obj.has_next or page_obj.has_previous %}
     <div class="d-flex p-4 justify-content-center">
         <ul class="pagination">
             {% if page_obj.has_previous %}
