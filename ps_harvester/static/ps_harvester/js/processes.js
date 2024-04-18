@@ -15,16 +15,23 @@ $(document).ready(function () {
         }
         return cookieValue;
     }
-    
+
     const csrftoken = getCookie('csrftoken');
 
-    function updateEntry(url, processID, entryID){
+    function updateEntry(url, processID, entryID) {
 
-        const harvestEntry = $(`.harvest-entry[data-entry-id=${entryID}]`)
-        const harvestEntries = $(`.harvest-entries[data-process-id=${processID}]`)
-        const statusText = $(`.process-status[data-process-id=${processID}] span`)
-        const reference = {"COMPLETE": "complete-status",
-                           "INVALID": "invalid-status"}
+        processRow = $(`.process-row[data-process-id=${processID}]`)
+        entryRow = $(`.entry-row[data-entry-id=${entryID}]`)
+
+        currentStatus = processRow.find("span[class$='-status']")
+        entryContainer = processRow.find(".entry-container")
+        reference = {
+            "COMPLETE": "complete-status",
+            "INCOMPLETE": "incomplete-status",
+            "PENDING REVIEW": "review-status",
+            "ERROR": "error-status"
+            }
+
         $.ajax({
             url: url,
             type: "POST",
@@ -32,17 +39,26 @@ $(document).ready(function () {
                 'X-CSRFToken': csrftoken
             },
             success: function (data) {
-                harvestEntry.remove()
-        
-                if (statusText.text() !== data.process_status) {
-                    statusText.removeClass('review-status')
-                    statusText.addClass(reference[data.process_status])
-                    statusText.text(data.process_status)
+                entryRow.remove()
 
-                    harvestEntries.find('.accordion-body').append(
-                        `<span class="text-vs-dblue">No entries for review.</span>`
+                currentStatus.removeClass()
+                currentStatus.addClass(reference[data.process_status])
+                currentStatus.text(data.process_status)
+                
+                entryRows = entryContainer.find("table tbody tr")
+                reviewCounter = currentStatus.next("span")
+
+                if (entryRows.length < 1){
+                    entryContainer.find('table').remove()
+                    reviewCounter.remove()
+                    entryContainer.append(
+                        `<span class="ps-2">No entries for review.</span>`
                     )
                 }
+                else{
+                    reviewCounter.text(`(${entryRows.length})`)
+                }
+                console.log('Successfully update harvest entry.')
             },
             error: function (xhr, status, error) {
                 console.log("Failed to update harvest entry");
@@ -51,31 +67,31 @@ $(document).ready(function () {
     }
 
     $(".resolve-entry > button").click(function () {
-        var parent = $(this).parent(".resolve-entry")
+        parent = $(this).parent(".resolve-entry")
         $(parent).find(".icon-btn").css("display", "inline");
         $(this).css("display", "none");
     });
 
     $(".resolve-entry .confirm").click(function (e) {
         e.preventDefault();
-        const url = $(this).data("url");
-        const processID = $(this).data("process-id");
-        const entryID = $(this).data("entry-id");
+        url = $(this).data("url");
+        processID = $(this).parents(".process-row").data("process-id");
+        entryID = $(this).parents(".entry-row").data("entry-id");
         updateEntry(url, processID, entryID)
     });
 
     $(".resolve-entry .cancel").click(function () {
-        var parent = $(this).parents(".resolve-entry")
+        parent = $(this).parents(".resolve-entry")
         $(parent).find(".icon-btn").css("display", "none")
         $(parent).find("button").css("display", "inline")
     });
 
     $(".delete-entry-modal .confirm").click(function (e) {
         e.preventDefault();
-        const url = $(this).data("url");
-        const processID = $(this).data("process-id");
-        const entryID = $(this).data("entry-id");
-
+        url = $(this).data("url");
+        deleteEntryModal = $(this).parents('.delete-entry-modal')
+        processID = deleteEntryModal.data("process-id");
+        entryID = deleteEntryModal.data("entry-id");
         updateEntry(url, processID, entryID)
     });
 

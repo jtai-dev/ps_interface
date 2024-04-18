@@ -8,19 +8,14 @@ app_name = "ps_harvester"
 
 urlpatterns = [
     path(
-        "",
+        "processes",
         view=views.HarvestProcessList.as_view(),
-        name="harvester",
+        name="process_list",
     ),
     path(
-        "file",
+        "file-harvest",
         view=views.FileHarvester.as_view(),
         name="file_harvest",
-    ),
-    path(
-        "web",
-        view=views.web_harvester,
-        name="web_harvester",
     ),
     path(
         "process/<int:pk>",

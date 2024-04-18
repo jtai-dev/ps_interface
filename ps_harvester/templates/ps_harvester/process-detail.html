@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'ps_harvester/css/process_detail.css' %}">
+<link rel="stylesheet" href="{% static 'ps_harvester/css/modal.css' %}">
+{% endblock %}
+
+{% block extra_script %}
+<script src="{% static 'ps_harvester/js/process_detail.js' %}"></script>
+<script src="{% static 'ps_harvester/js/modal.js' %}"></script>
+{% endblock %}
+
+{% block content_container %}
+
+
+<a class="btn bg-vs-dblue me-3" href="{% url 'ps_harvester:process_list' %}">
+<i class="bi bi-arrow-left"></i> Back
+</a>
+
+<div class="row process-row pt-4" data-process-id="{{harvestprocess.pk}}">
+    <div class="col d-flex align-items-center">
+
+
+        <div class="process-id">
+            <button class="link-btn"
+                    data-bs-toggle="modal" 
+                    data-bs-target=".process-notes">
+                    <h2>Harvest Process - ID: {{ harvestprocess.pk }}</h2>
+            </button>
+        </div>
+    </div>
+    <div class="col d-flex justify-content-end">
+        <button class="delete-process btn bg-vs-red"
+                data-bs-toggle="modal"
+                data-bs-target=".delete-process-modal"
+                >Delete Process
+        </button>
+    </div>
+</div>
+
+{% include "ps_harvester/process-modal.html" with process=harvestprocess %}
+
+<div class="delete-process-modal modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 text-vs-dblue">Delete Process - [ID: {{harvestprocess.pk}}]?</h1>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-check form-switch text-vs-dblue">
+                    <p>Deleting this process will remove all the entries associated with this process.</p>
+                    <p>Each entry made by the harvester will no longer be associated with entries imported into the VoteSmart's database</p>
+                    <p>If you wish to also delete all associated entries made to the VoteSmart's database, and to avoid the above, 
+                        please toggle the button below.</p>
+                    <label class="form-check-label" for="pvsdb-delete">Delete entries in VoteSmart's database</label>
+                    <input class="form-check-input pvsdb-delete" type="checkbox" role="switch">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" 
+                        class="confirm btn bg-vs-red"
+                        data-url="{% url 'ps_harvester:delete_process' pk=harvestprocess.pk %}"
+                        data-bs-dismiss="modal">Yes
+                </button>
+                <button type="button" class="btn bg-vs-dblue" data-bs-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if harvestprocess.error_msg %}
+<div class="pt-4 text-vs-red">
+    <h5>No entries due to an error</h5> 
+    <a class="link-btn" 
+    data-bs-toggle="modal" 
+    data-bs-target=".process-error[data-process-id='{{harvestprocess.pk}}']">
+    <h5>View error</h5>
+    </a>
+</div>
+   
+{% else %}
+<div class="entry-container pt-4">
+    <table class="table">
+        <thead class="text-vs-dblue">
+            <th width="10%">Entry ID</th>
+            <th width="60%">Review Message</th>
+            <th width="20%">Modified</th>
+            <th width="10%" colspan="2" class="text-center">Actions</th>
+        </thead>
+        <tbody>
+            {% for e in harvestprocess.entries_resolved %}
+            <tr class="entry-row" data-entry-id="{{ e.entry_id }}">
+                <td class="entry-id">
+                    <button class="link-btn"
+                            data-bs-toggle="modal" 
+                            data-bs-target=".entry-notes[data-entry-id='{{ e.entry_id }}']">
+                    {{ e.entry_id }}
+                    </button>
+                </td>
+                <td><a class="link-btn" href="{% url 'ps_pvsadmin:speech_by_candidate' speech_candidate_id=e.speech_candidate_id candidate_id=e.candidate_id %}" target="_blank">{{ e.review_message }}</a></td>
+                <td>{{ e.modified }}</td>
+                <td>
+                    <div class="unresolve-entry d-flex justify-content-between">
+                        <button class="btn bg-vs-dblue">Unresolve</button>
+            
+                        <i class="confirm icon-btn bi bi-check-square-fill me-2"
+                            data-url="{% url 'ps_harvester:unresolve_entry' pk=e.entry_id %}">
+                        </i>
+    
+                        <i class="cancel icon-btn bi-x-square-fill ms-3 text-vs-red"></i>
+                    </div>
+                </td>
+                <td>          
+                    <!-- Delete Button -->
+                    <div class="delete-entry">
+                        <button class="btn bg-vs-red" 
+                                data-bs-toggle="modal" 
+                                data-bs-target=".delete-entry-modal[data-entry-id='{{ e.entry_id }}']"
+                                >Delete
+                        </button>
+                    </div>
+                </td>
+            {% include "ps_harvester/entry-modal.html" with entry_id=e.entry_id process_id=p.process_id %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endif %}
+    
+{% endblock %}

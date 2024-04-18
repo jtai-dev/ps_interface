@@ -52,36 +52,43 @@
     color: var(--vs-dblue);
 }
 
-.icon-btn{
-    font-size: 2.0rem;
+.icon-btn {
+    font-size: 1.5rem;
 }
 
 .link-btn:hover,
-.icon-btn:hover{
+.icon-btn:hover {
     color: var(--vs-lblue);
     cursor: pointer;
 }
 
-.card-accordion {
-    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.05);
-    border-radius: 0.75rem;
-    background-color: var(--vs-white);
-    border-color: var(--vs-white);
-}
-
-.card-accordion>.accordion-button.collapsed {
-    background-color: var(--vs-white);
-    box-shadow: none;
-}
-
-.card-accordion>.accordion-button:not(.collapsed) {
-    background-color: var(--vs-white);
-    box-shadow: none;
-}
-
 .accordion-item{
-    border-radius: 0.75rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem !important;
+    border:0;
+    /* box-shadow: 1rem 0.5rem 1rem rgba(0, 0, 0, 0.04); */
+    color: inherit;
 }
+
+.accordion-button.collapsed{
+    border-radius: 0.5rem !important;
+    color:inherit;
+    border-color: inherit;
+    border:none
+}
+
+
+.accordion-button:not(.collapsed){
+    background-color: inherit;
+    border:0;
+    box-shadow: 0px 2px 2px -2px var(--vs-lblue);
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+
+
+
 
 @keyframes subtle-gradient {
     0% {

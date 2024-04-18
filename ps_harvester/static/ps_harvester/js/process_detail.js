@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    
+
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -18,9 +18,9 @@ $(document).ready(function () {
 
     const csrftoken = getCookie('csrftoken');
 
-    function updateEntry(url, entryID){
+    function updateEntry(url, entryID) {
 
-        const harvestEntry = $(`.harvest-entry[data-entry-id=${entryID}]`)
+        entryRow = $(`.entry-row[data-entry-id=${entryID}]`)
 
         $.ajax({
             url: url,
@@ -29,8 +29,8 @@ $(document).ready(function () {
                 'X-CSRFToken': csrftoken
             },
             success: function (data) {
-                console.log(harvestEntry)
-                harvestEntry.remove()
+                entryRow.remove()
+                console.log('Successfully update harvest entry.')
             },
             error: function (xhr, status, error) {
                 console.log("Failed to update harvest entry");
@@ -47,49 +47,48 @@ $(document).ready(function () {
                 'X-CSRFToken': csrftoken
             },
 
-            success: function (data){
-                if (data.redirect_url){
+            success: function (data) {
+                if (data.redirect_url) {
                     window.location.href = data.redirect_url;
                 }
             },
-            error: function(xhr){
+            error: function (xhr) {
                 console.log("Failed to delete process")
             }
         })
     }
 
-    $(".confirm-delete-process").click(function (e){
+
+    $(".unresolve-entry > button").click(function () {
+        parent = $(this).parent(".unresolve-entry")
+        $(parent).find(".icon-btn").css("display", "inline");
+        $(this).css("display", "none");
+    });
+
+
+    $(".unresolve-entry .confirm").click(function (e) {
+        e.preventDefault();
+        url = $(this).data("url");
+        entryID = $(this).parents(".entry-row").data("entry-id");
+        updateEntry(url, entryID)
+    });
+
+    $(".unresolve-entry .cancel").click(function () {
+        parent = $(this).parents(".unresolve-entry")
+        $(parent).find(".icon-btn").css("display", "none")
+        $(parent).find("button").css("display", "inline")
+    });
+
+    $(".delete-entry-modal .confirm").click(function (e) {
+        e.preventDefault();
+        url = $(this).data("url");
+        entryID = $(this).parents('.delete-entry-modal').data("entry-id");
+        updateEntry(url, entryID)
+    });
+
+    $(".delete-process-modal .confirm").click(function (e) {
         e.preventDefault();
         deleteProcess($(this).data("url"))
     });
 
-    $(".unresolve-entry").click(function () {
-        var entryId = $(this).data("entry-id");
-        $(`.confirm-unresolve-entry[data-entry-id=${entryId}]`).css("display", "inline");
-        $(`.cancel-unresolve-entry[data-entry-id=${entryId}]`).css("display", "inline");
-        $(this).css("display", "none");
-    });
-
-    $(".confirm-unresolve-entry").click(function (e) {
-        e.preventDefault();
-        const url = $(this).data("url");
-        const entryID = $(this).data("entry-id");
-        updateEntry(url, entryID)
-    });
-
-    $(".cancel-unresolve-entry").click(function () {
-        var entryId = $(this).data("entry-id");
-        $(this).css("display", "none");
-        $(`.confirm-unresolve-entry[data-entry-id=${entryId}]`).css("display", "none");
-        $(`.unresolve-entry[data-entry-id=${entryId}]`).css("display", "inline");
-
-    });
-
-    $(".confirm-delete-entry").click(function (e) {
-        e.preventDefault(); 
-        const url = $(this).data("url");
-        const entryID = $(this).data("entry-id");
-
-        updateEntry(url, entryID)
-    });
 });

@@ -3,7 +3,7 @@
     font-weight: bold;
 }
 
-.invalid-status {
+.incomplete-status {
     color: #adb5bd;
     font-weight: bold;
 }
@@ -16,10 +16,79 @@
 
 .error-status {
     color: var(--vs-red);
-    text-decoration: underline;
     font-weight: bold;
 }
 
 .resolve-entry .icon-btn {
     display: none;
+}
+
+.resolve-entry .confirm{
+    color:#20c997;
+}
+
+
+.process-row {
+    display: flex;
+    align-items:first baseline;
+    width: 100%;
+}
+
+.process-accordion-row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;  
+    width:100%;
+    color:inherit;
+    gap: 0.5rem;
+}
+
+.process-status-container{
+    margin-left: auto;
+    margin-right: 1rem;
+}
+
+.process-dt-created{
+    font-size: 1.2rem;
+    font-weight: bold;
+    flex: 0 0 auto;
+    text-align: right;
+}
+.total-entries{
+    font-size: 1.2rem;
+}
+
+
+.process-id {
+    font-size: 1.2rem;
+    font-weight: bold;
+    flex: 0 0 auto;
+    min-width: 4rem;
+    max-width: 4rem;
+    margin-right: 1rem;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    text-align: center;
+}
+
+.accordion-item {
+    flex: 1 0 auto;
+    min-width: 0;
+}
+
+.accordion-body{
+    padding:0;
+}
+
+.accordion-body table td,
+.accordion-body table th{
+    color: var(--vs-dblue) !important;
+}
+
+.accordion-body table td{
+    vertical-align: middle;
+}
+
+.resolve-entry{
+    flex-shrink: 0;
 }

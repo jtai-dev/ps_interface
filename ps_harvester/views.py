@@ -24,10 +24,10 @@ class HarvestProcessList(LoginRequiredMixin, ListView):
 
     login_url = reverse_lazy("ps_auth:login")
 
-    template_name = "ps_harvester/processes.html"
+    template_name = "ps_harvester/process-list.html"
     context_object_name = "processes_with_entries"
     model = HarvestProcess
-    paginate_by = 15
+    paginate_by = 10
     ordering = ("-created",)
 
     def get_queryset(self):
@@ -54,18 +54,20 @@ class HarvestProcessList(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
 
         context = super().get_context_data(**kwargs)
-        page_obj = context["page_obj"]
-        paginator = page_obj.paginator
-        context["custom_elided_page_range"] = paginator.get_elided_page_range(
-            page_obj.number, on_each_side=2
-        )
+        page_obj = context.get("page_obj")
+
+        if page_obj is not None:
+            paginator = page_obj.paginator
+            context["custom_elided_page_range"] = paginator.get_elided_page_range(
+                page_obj.number, on_each_side=2
+            )
 
         return context
 
 
 class HarvestProcessDetail(DetailView):
 
-    template_name = "ps_harvester/process_detail.html"
+    template_name = "ps_harvester/process-detail.html"
     model = HarvestProcess
 
     def get_queryset(self):
@@ -90,7 +92,7 @@ class DeleteHarvestProcess(PermissionRequiredMixin, View):
     def post(self, request, pk):
         p = HarvestProcess.objects.get(process_id=pk)
         p.delete()
-        return JsonResponse({"redirect_url": reverse("ps_harvester:harvester")})
+        return JsonResponse({"redirect_url": reverse("ps_harvester:process_list")})
 
 
 class EditProcessNotes(PermissionRequiredMixin, UpdateView):
@@ -99,7 +101,7 @@ class EditProcessNotes(PermissionRequiredMixin, UpdateView):
         "ps_harvester.change_harvestprocess",
     ]
 
-    template_name = "ps_harvester/processes.html"
+    template_name = "ps_harvester/process-list.html"
     context_object_name = "edit_process_notes"
     model = HarvestProcess
     form_class = ProcessNotesForm
@@ -126,7 +128,7 @@ class EditEntryNotes(PermissionRequiredMixin, UpdateView):
         "ps_harvester.change_harvestentryspeech",
     ]
 
-    template_name = "ps_harvester/processes.html"
+    template_name = "ps_harvester/process-list.html"
     context_object_name = "edit_entry_notes"
     model = HarvestEntrySpeech
     form_class = EntryNotesForm
@@ -193,7 +195,7 @@ class FileHarvester(PermissionRequiredMixin, FormView):
         "ps_harvester.add_harvestprocess",
     ]
 
-    template_name = "ps_harvester/file_harvest.html"
+    template_name = "ps_harvester/file-harvest.html"
     form_class = HarvestFilesForm
     success_url = reverse_lazy("ps_harvester:file_harvest")
 
@@ -223,7 +225,7 @@ class FileHarvester(PermissionRequiredMixin, FormView):
 
             process.refresh_status()
 
-            return HttpResponseRedirect(reverse("ps_harvester:harvester"))
+            return HttpResponseRedirect(reverse("ps_harvester:process_list"))
 
         else:
             returned_context = (
@@ -234,10 +236,6 @@ class FileHarvester(PermissionRequiredMixin, FormView):
 
             return render(
                 request,
-                "ps_harvester/file_harvest.html",
+                "ps_harvester/file-harvest.html",
                 context={"form": HarvestFilesForm()} | returned_context,
             )
-
-
-def web_harvester(request):
-    return render(request, "ps_harvester/web_harvester.html")

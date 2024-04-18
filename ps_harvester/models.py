@@ -4,7 +4,7 @@ from django.db import models
 class HarvestStatus(models.Model):
     # Names:
     # 1) COMPLETE
-    # 2) INVALID
+    # 2) INCOMPLETE
     # 3) PENDING REVIEW
     # 4) ERROR
     status_id = models.AutoField(primary_key=True)

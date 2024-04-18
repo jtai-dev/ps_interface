@@ -10,7 +10,7 @@ def index(request):
 
 class PermissionDeniedView(TemplateView):
 
-    template_name = "403_error.html"
+    template_name = "403-error.html"
     error_code = "403"
 
     def get_context_data(self, **kwargs):
@@ -31,7 +31,7 @@ class PermissionDeniedView(TemplateView):
 
 class PageNotFoundView(TemplateView):
 
-    template_name = "404_error.html"
+    template_name = "404-error.html"
     error_code = "404"
 
     def get_context_data(self, **kwargs):

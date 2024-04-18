@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'ps_harvester/css/processes.css' %}">
+<link rel="stylesheet" href="{% static 'ps_harvester/css/modal.css' %}">
+{% endblock %}
+
+{% block extra_script %}
+<script src="{% static 'ps_harvester/js/processes.js' %}"></script>
+<script src="{% static 'ps_harvester/js/modal.js' %}"></script>
+{% endblock %}
+
+
+{% block content_container %}
+<div class="mb-5">
+    <h1>Harvest Processes</h1>
+</div>
+
+{% if processes_with_entries.count == 0%}
+<div class="mt-4 fst-italic">
+    <h4>No harvest process yet.</h4>
+</div>
+{% endif %}
+
+<div class="accordion" id="harvest-process-accordion">
+
+    {% for p in processes_with_entries %}
+    <div class="process-row" data-process-id="{{ p.process_id }}">
+
+        <div class="process-id">
+            <button class="link-btn"
+                data-bs-toggle="modal" 
+                data-bs-target=".process-notes[data-process-id='{{ p.process_id }}']">
+                {{p.process_id}}:
+            </button>
+        </div>
+
+        <div class="accordion-item shadow-sm">
+            <div class="accordion-header">
+                <div class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target=".accordion-collapse[data-process-id='{{ p.process_id }}']">
+                    <div class="process-accordion-row">
+                        <div class="process-dt-created">{{ p.created | date:"M d, Y h:i A"}}</div> 
+                        <div class="total-entries">({{ p.harvestentryspeech_set.all | length }})</div>
+                        <div class="process-status-container">
+                            {% if p.status.status_id == 1 %}
+                            <span class="complete-status">{{ p.status.status_name }}</span>
+                            {% elif p.status.status_id == 2 %}
+                            <span class="incomplete-status">{{ p.status.status_name }}</span>
+                            {% elif p.status.status_id == 3 %}
+                            <span class="review-status">{{ p.status.status_name }}</span>
+                            <span>({{p.entries_for_review | length}})</span>
+                            {% elif p.status.status_id == 4 %}
+                            <span class="error-status">{{ p.status.status_name }}</a>
+                            {% endif %} 
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% include "ps_harvester/process-modal.html" with process=p %}
+            
+            <div class="accordion-collapse collapse"
+                 data-process-id="{{ p.process_id }}"
+                 data-bs-parent="#harvest-process-accordion">
+
+                <div class="accordion-body text-vs-dblue">
+
+                    <div class="entry-container px-3 pt-3">
+                        {% if not p.entries_for_review%}
+                        <span class="ps-2">No entries for review.</span>
+                        {% else %}
+                        <table class="table table-borderless">
+                            <thead class="text-vs-dblue">
+                                <th width="10%">Entry ID</th>
+                                <th width="80%">Review Message</th>
+                                <th width="10%" colspan="2" class="text-center">Actions</th>
+                            </thead>
+                            <tbody>
+                                {% for e in p.entries_for_review %}
+                                <tr class="entry-row" data-entry-id="{{ e.entry_id }}">
+                                    <td class="entry-id">
+                                        <button class="link-btn"
+                                                data-bs-toggle="modal" 
+                                                data-bs-target=".entry-notes[data-entry-id='{{ e.entry_id }}']">
+                                        {{ e.entry_id }}
+                                        </button>
+                                    </td>
+                                    <td><a class="link-btn" href="{% url 'ps_pvsadmin:speech_by_candidate' speech_candidate_id=e.speech_candidate_id candidate_id=e.candidate_id %}" target="_blank">{{ e.review_message }}</a></td>
+                                    <td>
+                                        <div class="resolve-entry d-flex justify-content-between">
+                                            <button class="btn bg-vs-dblue">Resolve</button>
+                                
+                                            <i class="confirm icon-btn bi bi-check-square-fill me-2"
+                                                data-url="{% url 'ps_harvester:resolve_entry' pk=e.entry_id %}">
+                                            </i>
+
+                                            <i class="cancel icon-btn bi-x-square-fill ms-3 text-vs-red"></i>
+                                        </div>
+                                    </td>
+                                    <td>          
+                                        <!-- Delete Button -->
+                                        <div class="delete-entry">
+                                            <button class="btn bg-vs-red" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target=".delete-entry-modal[data-entry-id='{{ e.entry_id }}']"
+                                                    >Delete
+                                            </button>
+                                        </div>
+                                    </td>
+                                {% include "ps_harvester/entry-modal.html" with entry_id=e.entry_id process_id=p.process_id %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% endif %}
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex px-3 pb-3 justify-content-center fw-bold">
+                        {% if p.status.status_id == 4 %}
+                        <a class="link-btn" 
+                           data-bs-toggle="modal" 
+                           data-bs-target=".process-error[data-process-id='{{p.process_id}}']">
+                            <span>View error</span>
+                        </a>
+                        {% else %}
+                        <a class="link-btn" href="{% url 'ps_harvester:harvest_process' pk=p.process_id %}">
+                            <span>See {{ p.harvestentryspeech_set.all | length }} resolved entries</span>
+                        </a>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+{% if page_obj.has_next or page_obj.has_previous %}
+    <div class="d-flex p-4 justify-content-center">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a href="?page={{ page_obj.previous_page_number }}" class="page-link bg-vs-dblue">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><a class="page-link bg-vs-dblue">Previous</a></li>
+            {% endif %}
+
+            {% for i in custom_elided_page_range %}
+                {% if page_obj.number == i %}
+                    <li class="page-item"><span class="page-link bg-vs-dblue">{{ i }}</span></li>
+
+                {% else %}
+                    {% if i == page_obj.paginator.ELLIPSIS %}
+                        <li class="page-item"><span class="page-link bg-vs-white">{{ i }}</span></li>
+                    {% else %}
+                        <li class="page-item"><a class="page-link bg-vs-white" href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a href="?page={{ page_obj.next_page_number }}" class="page-link bg-vs-dblue">Next</a>
+            </li>
+            {% else %}
+                <li class="page-item disabled"><a class="page-link">Next</a></li>
+            {% endif %}
+        </ul>
+    </div>
+{% endif %}
+{% endblock %}
+
+
