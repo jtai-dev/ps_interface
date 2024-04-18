@@ -10,7 +10,7 @@ app_name = "ps_pvsadmin"
 urlpatterns = [
     path(
         "ps/speech_candidate/<int:speech_candidate_id>/<int:candidate_id>",
-        view=views.SpeechCandidateView.as_view(),
+        view=views.SpeechByCandidateView.as_view(),
         name="speech_by_candidate",
     ),
     path(

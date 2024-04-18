@@ -41,8 +41,8 @@ class RedirectToStatementsMixin(RedirectToPVSAdminMixin):
     url = RedirectToCandidateMixin.url + config("PVSADMIN_PS_URL")
 
 
-class SpeechCandidateView(DetailView, RedirectToStatementsMixin):
-    template_name = "ps_pvsadmin/ps_statements.html"
+class SpeechByCandidateView(DetailView, RedirectToStatementsMixin):
+    template_name = "ps_pvsadmin/speech-by-candidate.html"
     model = SpeechCandidate
     context_object_name = "speech_candidate"
     pk_url_kwarg = "speech_candidate_id"
@@ -86,7 +86,7 @@ class SpeechCandidateView(DetailView, RedirectToStatementsMixin):
 
 
 class UpdateSpeechView(UpdateView, RedirectToPVSAdminMixin):
-    template_name = "ps_pvsadmin/ps_statements.html"
+    template_name = "ps_pvsadmin/speech-by-candidate.html"
     model = Speech
     form_class = SpeechUpdateForm
     context_object_name = "speech_form"
@@ -108,8 +108,8 @@ class UpdateSpeechView(UpdateView, RedirectToPVSAdminMixin):
 
 class DeleteSpeechCandidateView(DeleteView, RedirectToPVSAdminMixin):
     model = SpeechCandidate
-    template_name = "ps_pvsadmin/ps_statements.html"
-    success_url = reverse_lazy("ps_harvester:harvester")
+    template_name = "ps_pvsadmin/speech-by-candidate.html"
+    success_url = reverse_lazy("ps_harvester:process_list")
     pk_url_kwarg = "speech_candidate_id"
 
     def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
@@ -120,8 +120,8 @@ class DeleteSpeechCandidateView(DeleteView, RedirectToPVSAdminMixin):
 
 class DeleteSpeechView(DeleteView, RedirectToPVSAdminMixin):
     model = Speech
-    template_name = "ps_pvsadmin/ps_statements.html"
-    success_url = reverse_lazy("ps_harvester:harvester")
+    template_name = "ps_pvsadmin/speech-by-candidate.html"
+    success_url = reverse_lazy("ps_harvester:process_list")
     pk_url_kwarg = "speech_id"
 
     def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:

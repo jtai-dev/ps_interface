@@ -4,7 +4,6 @@ from django.contrib.auth import views as auth_views
 from django.template.loader import render_to_string
 
 from django.http import (
-    HttpResponse,
     HttpResponseRedirect,
     JsonResponse,
 )
@@ -83,7 +82,7 @@ class PSLogoutView(auth_views.LogoutView):
 class ForgotPasswordView(auth_views.PasswordResetView):
 
     form_class = ForgotPasswordForm
-    template_name = "ps_auth/forgot_pass.html"
+    template_name = "ps_auth/forgot-pass.html"
     success_url = reverse_lazy("ps_auth:forgotpassword")
 
     def form_valid(self, form) -> HttpResponseRedirect:
