@@ -23,12 +23,13 @@ $(document).ready(function () {
         processRow = $(`.process-row[data-process-id=${processID}]`)
         entryRow = $(`.entry-row[data-entry-id=${entryID}]`)
 
-        currentStatus = processRow.find("span[class$='-status']")
         totalEntries = processRow.find(".total-entries")
-        
+        currentStatus = processRow.find("span[class$='-status']")
         entryContainer = processRow.find(".entry-container")
+        
+        pendingReviewCounter = currentStatus.next("span")
         entryFooter = entryContainer.nextAll("div")
-        entryFooterLink = entryFooter.find("a>span")
+        entryFooterLink = entryFooter.find("a > span")
 
         reference = {
             "COMPLETE": "complete-status",
@@ -44,30 +45,33 @@ $(document).ready(function () {
                 'X-CSRFToken': csrftoken
             },
             success: function (data) {
+
                 entryRow.remove()
+                entryRows = entryContainer.find("table tbody tr")
 
                 currentStatus.removeClass()
                 currentStatus.addClass(reference[data.process_status])
                 currentStatus.text(data.process_status)
 
-                entryRows = entryContainer.find("table tbody tr")
-                reviewCounter = currentStatus.next("span")
+                totalEntries.text(`(${data.entries_count})`)
+
+                entryFooterLink.empty()
+                entryFooterLink.text(
+                    `See ${data.entries_count - entryRows.length} resolved entries`
+                )
 
                 if (entryRows.length < 1) {
+                    pendingReviewCounter.remove()
+
                     entryContainer.find('table').remove()
-                    reviewCounter.remove()
                     entryContainer.append(
                         `<span class="ps-2">No entries for review.</span>`
                     )
                 }
                 else {
-                    reviewCounter.text(`(${entryRows.length})`)
+                    pendingReviewCounter.text(`(${entryRows.length})`)
                 }
-                entryFooterLink.empty()
-                entryFooterLink.text(
-                    `See ${data.entries_count - entryRows.length} resolved entries`
-                )
-                totalEntries.text(`(${data.entries_count})`)
+                
                 console.log('Successfully update harvest entry.')
             },
             error: function (xhr, status, error) {

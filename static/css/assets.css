@@ -8,6 +8,20 @@
     --vs-bg-animation: subtle-gradient 10s ease infinite;
 }
 
+@keyframes subtle-gradient {
+    0% {
+        background-position: 0% 20%;
+    }
+
+    50% {
+        background-position: 20% 0%;
+    }
+
+    100% {
+        background-position: 0% 20%;
+    }
+}
+
 .text-vs-lblue {
     color: var(--vs-lblue);
 }
@@ -66,40 +80,21 @@
     margin-bottom: 1rem;
     border-radius: 0.5rem !important;
     border:0;
-    /* box-shadow: 1rem 0.5rem 1rem rgba(0, 0, 0, 0.04); */
+    box-shadow: 1rem 0.5rem 1rem rgba(0, 0, 0, 0.04);
     color: inherit;
 }
 
 .accordion-button.collapsed{
     border-radius: 0.5rem !important;
-    color:inherit;
     border-color: inherit;
-    border:none
+    color:inherit;
+    border: 0;
 }
-
 
 .accordion-button:not(.collapsed){
     background-color: inherit;
-    border:0;
     box-shadow: 0px 2px 2px -2px var(--vs-lblue);
+    border:0;
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
-}
-
-
-
-
-
-@keyframes subtle-gradient {
-    0% {
-        background-position: 0% 20%;
-    }
-
-    50% {
-        background-position: 20% 0%;
-    }
-
-    100% {
-        background-position: 0% 20%;
-    }
 }
