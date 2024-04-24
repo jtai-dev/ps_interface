@@ -3,10 +3,11 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5 text-vs-dblue">Harvest Process Notes</h1>
+        <h1 class="modal-title fs-5 text-vs-dblue">Harvest Process - ID: {{ process.pk }}</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
+        <span class="ps-1">Notes:</span>
         <textarea disabled class="form-control" data-url="{% url 'ps_harvester:harvest_process_note' pk=process.pk %}"></textarea>
       </div>
       <div class="modal-footer">
@@ -22,7 +23,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5 text-vs-dblue">Error Processing</h1>
+        <h1 class="modal-title fs-5 text-vs-dblue">Error Processing - ID: {{ process.pk }}</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body text-vs-dblue">

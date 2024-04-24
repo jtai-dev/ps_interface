@@ -45,7 +45,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5 text-vs-dblue">Delete Process - [ID: {{harvestprocess.pk}}]?</h1>
+                <h1 class="modal-title fs-5 text-vs-dblue">Delete Harvest Process - ID: {{harvestprocess.pk}}?</h1>
                 <button class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -104,12 +104,11 @@
                 <td>
                     <div class="unresolve-entry d-flex justify-content-between">
                         <button class="btn bg-vs-dblue">Unresolve</button>
-            
-                        <i class="confirm icon-btn bi bi-check-square-fill me-2"
+                            <i class="confirm icon-btn bi bi-check-square-fill me-2"
                             data-url="{% url 'ps_harvester:unresolve_entry' pk=e.entry_id %}">
-                        </i>
+                            </i>
     
-                        <i class="cancel icon-btn bi-x-square-fill ms-3 text-vs-red"></i>
+                            <i class="cancel icon-btn bi-x-square-fill ms-3 text-vs-red"></i>
                     </div>
                 </td>
                 <td>          

@@ -24,13 +24,18 @@ $(document).ready(function () {
         entryRow = $(`.entry-row[data-entry-id=${entryID}]`)
 
         currentStatus = processRow.find("span[class$='-status']")
+        totalEntries = processRow.find(".total-entries")
+        
         entryContainer = processRow.find(".entry-container")
+        entryFooter = entryContainer.nextAll("div")
+        entryFooterLink = entryFooter.find("a>span")
+
         reference = {
             "COMPLETE": "complete-status",
             "INCOMPLETE": "incomplete-status",
             "PENDING REVIEW": "review-status",
             "ERROR": "error-status"
-            }
+        }
 
         $.ajax({
             url: url,
@@ -44,20 +49,25 @@ $(document).ready(function () {
                 currentStatus.removeClass()
                 currentStatus.addClass(reference[data.process_status])
                 currentStatus.text(data.process_status)
-                
+
                 entryRows = entryContainer.find("table tbody tr")
                 reviewCounter = currentStatus.next("span")
 
-                if (entryRows.length < 1){
+                if (entryRows.length < 1) {
                     entryContainer.find('table').remove()
                     reviewCounter.remove()
                     entryContainer.append(
                         `<span class="ps-2">No entries for review.</span>`
                     )
                 }
-                else{
+                else {
                     reviewCounter.text(`(${entryRows.length})`)
                 }
+                entryFooterLink.empty()
+                entryFooterLink.text(
+                    `See ${data.entries_count - entryRows.length} resolved entries`
+                )
+                totalEntries.text(`(${data.entries_count})`)
                 console.log('Successfully update harvest entry.')
             },
             error: function (xhr, status, error) {

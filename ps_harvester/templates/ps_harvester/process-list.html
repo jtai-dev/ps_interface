@@ -77,32 +77,33 @@
                         <table class="table table-borderless">
                             <thead class="text-vs-dblue">
                                 <th width="10%">Entry ID</th>
-                                <th width="80%">Review Message</th>
-                                <th width="10%" colspan="2" class="text-center">Actions</th>
+                                <th width="70%">Review Message</th>
+                                <th width="20%" colspan="2" class="text-center">Actions</th>
                             </thead>
                             <tbody>
                                 {% for e in p.entries_for_review %}
                                 <tr class="entry-row" data-entry-id="{{ e.entry_id }}">
-                                    <td class="entry-id">
+                                    <td class="entry-id" width="10%">
                                         <button class="link-btn"
                                                 data-bs-toggle="modal" 
                                                 data-bs-target=".entry-notes[data-entry-id='{{ e.entry_id }}']">
                                         {{ e.entry_id }}
                                         </button>
                                     </td>
-                                    <td><a class="link-btn" href="{% url 'ps_pvsadmin:speech_by_candidate' speech_candidate_id=e.speech_candidate_id candidate_id=e.candidate_id %}" target="_blank">{{ e.review_message }}</a></td>
-                                    <td>
-                                        <div class="resolve-entry d-flex justify-content-between">
+                                    <td width="70%"><a class="link-btn" href="{% url 'ps_pvsadmin:speech_by_candidate' speech_candidate_id=e.speech_candidate_id candidate_id=e.candidate_id %}" target="_blank">{{ e.review_message }}</a></td>
+                                    <td width="10%">
+                                        <div class="resolve-entry d-flex float-end text-center">
                                             <button class="btn bg-vs-dblue">Resolve</button>
-                                
-                                            <i class="confirm icon-btn bi bi-check-square-fill me-2"
+                                            <div>
+                                                <i class="confirm icon-btn bi bi-check-square-fill me-2"
                                                 data-url="{% url 'ps_harvester:resolve_entry' pk=e.entry_id %}">
-                                            </i>
+                                                </i>
 
-                                            <i class="cancel icon-btn bi-x-square-fill ms-3 text-vs-red"></i>
+                                                <i class="cancel icon-btn bi-x-square-fill ms-3 text-vs-red"></i>
+                                            </div>
                                         </div>
                                     </td>
-                                    <td>          
+                                    <td width="10%">          
                                         <!-- Delete Button -->
                                         <div class="delete-entry">
                                             <button class="btn bg-vs-red" 
@@ -131,7 +132,7 @@
                         </a>
                         {% else %}
                         <a class="link-btn" href="{% url 'ps_harvester:harvest_process' pk=p.process_id %}">
-                            <span>See {{ p.harvestentryspeech_set.all | length }} resolved entries</span>
+                            <span>See {{ p.entries_resolved | length }} resolved entries</span>
                         </a>
                         {% endif %}
                     </div>

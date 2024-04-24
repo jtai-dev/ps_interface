@@ -3,10 +3,11 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5 text-vs-dblue">Harvest Entry Notes</h1>
+        <h1 class="modal-title fs-5 text-vs-dblue">Harvest Entry - ID: {{ entry_id }}</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body text-vs-dblue">
+        <span class="ps-1">Notes:</span>
         <textarea disabled class="form-control" data-url="{% url 'ps_harvester:harvest_entry_note' pk=entry_id %}"></textarea>
       </div>
       <div class="modal-footer">
@@ -22,7 +23,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5 text-vs-dblue">Delete Entry Confirmation</h1>
+        <h1 class="modal-title fs-5 text-vs-dblue">Delete Harvest Entry - ID: {{ entry_id }}</h1>
         <button class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">

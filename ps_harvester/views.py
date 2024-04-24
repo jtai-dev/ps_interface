@@ -39,12 +39,12 @@ class HarvestProcessList(LoginRequiredMixin, ListView):
             Prefetch("harvestentryspeech_set", to_attr="all_entries"),
             Prefetch(
                 "harvestentryspeech_set",
-                queryset=entries_for_review,
+                queryset=entries_for_review.order_by("entry_id"),
                 to_attr="entries_for_review",
             ),
             Prefetch(
                 "harvestentryspeech_set",
-                queryset=entries_resolved,
+                queryset=entries_resolved.order_by("entry_id"),
                 to_attr="entries_resolved",
             ),
         )
@@ -78,7 +78,7 @@ class HarvestProcessDetail(DetailView):
             Prefetch(
                 "harvestentryspeech_set",
                 to_attr="entries_resolved",
-                queryset=entries_resolved,
+                queryset=entries_resolved.order_by("entry_id"),
             )
         )
         return queryset
@@ -159,7 +159,14 @@ class ResolveHarvestEntry(PermissionRequiredMixin, View):
         e = HarvestEntrySpeech.objects.get(entry_id=pk)
         e.resolve()
         process_status = e.process.refresh_status()
-        return JsonResponse({"process_status": process_status})
+        entries_count = HarvestEntrySpeech.objects.filter(process=e.process).count()
+
+        return JsonResponse(
+            {
+                "process_status": process_status,
+                "entries_count": entries_count,
+            }
+        )
 
 
 class UnresolveHarvestEntry(PermissionRequiredMixin, View):
@@ -185,7 +192,14 @@ class DeleteHarvestEntry(PermissionRequiredMixin, View):
         e = HarvestEntrySpeech.objects.get(entry_id=pk)
         e.delete()
         process_status = e.process.refresh_status()
-        return JsonResponse({"process_status": process_status})
+        entries_count = HarvestEntrySpeech.objects.filter(process=e.process).count()
+
+        return JsonResponse(
+            {
+                "process_status": process_status,
+                "entries_count": entries_count,
+            }
+        )
 
 
 class FileHarvester(PermissionRequiredMixin, FormView):
