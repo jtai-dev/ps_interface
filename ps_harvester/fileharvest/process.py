@@ -94,10 +94,9 @@ def main(file_contents):
 
     connection = establish_connection()
 
-    speech_to_candidate = defaultdict(set)
-    speech_candidate_to_harvest = defaultdict(dict)
-
     cursor = connection.cursor()
+
+    speech_to_candidate = defaultdict(set)
 
     for harvest in harvest_json.all:
         # speech_id is not shared at the moment
@@ -114,19 +113,23 @@ def main(file_contents):
 
         speech_to_candidate[speech_id].add(harvest)
 
+    speech_candidate_to_harvest = defaultdict(dict)
+
     for speech_id, harvests in speech_to_candidate.items():
         for harvest in harvests:
-            speech_candidate_id = insert_into_speech_candidate(
-                cursor, speech_id, harvest.candidate_id, str(datetime.now())
-            )[0]
+            for candidate_id in harvest.candidate_ids:
 
-            speech_candidate_to_harvest[speech_candidate_id][
-                "candidate_id"
-            ] = harvest.candidate_id
-            speech_candidate_to_harvest[speech_candidate_id]["review"] = harvest.review
-            speech_candidate_to_harvest[speech_candidate_id][
-                "review_message"
-            ] = harvest.review_message
+                speech_candidate_id = insert_into_speech_candidate(
+                    cursor, speech_id, candidate_id, str(datetime.now())
+                )[0]
+
+                speech_candidate_to_harvest[speech_candidate_id][
+                    "candidate_id"
+                ] = candidate_id
+                speech_candidate_to_harvest[speech_candidate_id]["review"] = harvest.review
+                speech_candidate_to_harvest[speech_candidate_id][
+                    "review_message"
+                ] = harvest.review_message
 
     connection.commit()
 

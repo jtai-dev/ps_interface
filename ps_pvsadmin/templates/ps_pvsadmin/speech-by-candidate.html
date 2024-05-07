@@ -177,7 +177,7 @@
 			<div class="accordion-header">
 				<button class="accordion-button collapsed text-vs-dblue" type="button" data-bs-toggle="collapse"
 						data-bs-target="#related-candidates">
-					<h5>Related Candidates ({{ related | length}})</h5>
+					<h5>Others to share this public statement ({{ related | length}})</h5>
 				</button>
 			</div>
 			
@@ -196,8 +196,7 @@
 							<tr>
 								<td>{{ sc.speech_candidate_id }}</td>
 								<td>{{ sc.candidate_id }}</td>
-								<td>{{ sc.candidate.firstname }} {{ sc.candidate.middlename }} {{ sc.candidate.lastname
-									}} </td>
+								<td>{{ sc.candidate.firstname }} {{ sc.candidate.middlename }} {{ sc.candidate.lastname }} </td>
 								<td>
 									<a class="btn bg-vs-dblue"
 										href="{% url 'ps_pvsadmin:speech_by_candidate' speech_candidate_id=sc.speech_candidate_id candidate_id=sc.candidate_id%}">View</a>

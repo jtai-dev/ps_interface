@@ -193,8 +193,8 @@ class HarvestArticle(JSONObject):
         super().__init__(data)
 
     @property
-    def candidate_id(self):
-        return self.get("candidate_id")
+    def candidate_ids(self):
+        return self.get("candidate_ids")
 
     @property
     def speechtype_id(self):
